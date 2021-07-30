@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import First from "./components/first";
+import { NormalText } from "./utils/typography";
+import { useCookies } from "react-cookie";
+import DatasetPicker from "./components/DatasetPicker";
 
-function App() {
+export default function App() {
+  const [cookies] = useCookies(["mode", "email", "phone"]);
+  const [Mode, SetMode] = useState({
+    mode: cookies.mode || "",
+    email: cookies.email || "",
+    phone: cookies.phone || "",
+  });
+  /* mode
+    '' -> First step
+    'lottery', 'anonymous' --> Second step
+    'confirm' --> Third
+    'done' ---> done
+  */
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <NormalText>
+      {Mode.mode === "" && <First HandleModeChange={SetMode} />}
+      {["lottery", "anonymous"].includes(Mode.mode) && (
+        <DatasetPicker mode={Mode} HandleModeChange={SetMode} />
+      )}
+    </NormalText>
   );
 }
-
-export default App;
