@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as _ from "lodash";
-import { Label } from "../utils/typography";
-import AvailableDataset from "../utils/dataset.json";
-import SearchIcon from "../icons/SearchIcon";
+import React, { Fragment, useEffect, useRef, useState } from "react"
+import * as _ from "lodash"
+import { Button, Label } from "../utils/typography"
+import AvailableDataset from "../utils/dataset.json"
+import SearchIcon from "../icons/SearchIcon"
+import TrashIcon from "../icons/TrashIcon"
+import styled from "styled-components"
 
 /*
 no,name,frequency,topic,category
@@ -10,31 +12,67 @@ no,ชื่อชุดข้อมูลที่จะสำรวจ,คว�
 */
 
 export default function DatasetPicker() {
-  const [Q, SetQ] = useState("");
-  const [selected, SetSelected] = useState({});
-  const searchInput = useRef(null);
+  const [Q, SetQ] = useState("")
+  const [ErrMsg, SetErrMsg] = useState("")
+  const [Selected, SetSelection] = useState({})
+  const searchInput = useRef(null)
   const [FilteredData, SetFilteredData] = useState(
     _.sortBy(AvailableDataset, ["category", "frequency"])
-  );
-  const [Category, SetCategory] = useState([]);
+  )
+  const [Category, SetCategory] = useState([])
 
-  useEffect(() => {
-    SetCategory(Array.from(new Set(FilteredData.map((i) => i.category))));
-  }, [FilteredData]);
+  const reachMaxSelection = () => {
+    if (Object.keys(Selected).length >= 20) {
+      SetErrMsg("เลือกได้สูงสุด 20 รายการ")
+      alert("เลือกได้สูงสุด 20 รายการ")
+      return true
+    }
+    SetErrMsg("")
+    return false
+  }
 
-  function handleFilter() {
-    console.log("filter search ", Q);
-    const catData = AvailableDataset.filter(
-      (i) => `${i.category} ${i.name}`.indexOf(Q) > -1
-    );
-
-    SetFilteredData(_.sortBy(catData, ["category", "frequency"]));
+  const addSelection = (item) => {
+    if (reachMaxSelection()) return
+    let a = {}
+    a[item.no] = item
+    SetSelection({
+      ...Selected,
+      ...a,
+    })
+  }
+  const removeSelection = (item) => {
+    SetErrMsg("")
+    let a = { ...Selected }
+    delete a[item.no]
+    SetSelection({
+      ...a,
+    })
+  }
+  const ToggleItem = (item, checked) => {
+    if (checked === undefined) {
+      if (Selected[item.no] === undefined) {
+        addSelection(item)
+      } else {
+        removeSelection(item)
+      }
+      return
+    } else if (checked) {
+      addSelection(item)
+    } else {
+      removeSelection(item)
+    }
   }
 
   useEffect(() => {
-    console.log("input search ", Q);
-    handleFilter();
-  }, [Q]);
+    SetCategory(Array.from(new Set(FilteredData.map((i) => i.category))))
+  }, [FilteredData])
+
+  useEffect(() => {
+    const catData = AvailableDataset.filter(
+      (i) => `${i.category} ${i.name}`.indexOf(Q) > -1
+    )
+    SetFilteredData(_.sortBy(catData, ["category", "frequency"]))
+  }, [Q])
 
   return (
     <div className="container">
@@ -52,8 +90,8 @@ export default function DatasetPicker() {
             defaultValue={Q}
             placeholder="ค้นหา..."
             onChange={(e) => {
-              const v = e.target.value.trim();
-              SetQ(v);
+              const v = e.target.value.trim()
+              SetQ(v)
             }}
             autoComplete="off"
             ref={searchInput}
@@ -63,6 +101,31 @@ export default function DatasetPicker() {
           </span>
         </p>
       </div>
+
+      {ErrMsg.length > 0 && (
+        <article className="message is-danger">
+          <div className="message-body">{ErrMsg}</div>
+        </article>
+      )}
+
+      {/* TODO: make this thing in Modal */}
+      <UL>
+        {Object.keys(Selected).map((k, ind) => (
+          <li key={`sel-${k}`}>
+            <Button
+              className={"button is-danger is-light is-normal"}
+              onClick={() => {
+                ToggleItem(Selected[k], false)
+              }}
+            >
+              <TrashIcon />
+            </Button>{" "}
+            <span>
+              {ind + 1}. {Selected[k].name}
+            </span>
+          </li>
+        ))}
+      </UL>
 
       <div className="columns">
         <div className="column">
@@ -81,31 +144,62 @@ export default function DatasetPicker() {
                   const items = _.sortBy(
                     FilteredData.filter((i) => i.category === currCat),
                     ["frequency"]
-                  );
+                  )
                   if (items.length === 0) {
-                    return <></>;
+                    return <></>
                   }
+                  const first = items[0]
                   const firstRow = (
-                    <tr key={`tr-${currCat}-${items[0].no}`}>
-                      <td rowSpan={items.length}>{items[0].category}</td>
-                      <td>{items[0].name}</td>
-                      <td>{items[0].frequency}</td>
-                      <td></td>
+                    <tr
+                      key={`tr-${currCat}-${first.no}`}
+                      onClick={() => {
+                        ToggleItem(first)
+                      }}
+                    >
+                      <td rowSpan={items.length}>{first.category}</td>
+                      <td>{first.name}</td>
+                      <td>{first.frequency}</td>
+                      <td>
+                        <label className="checkbox">
+                          <input
+                            type="checkbox"
+                            checked={Selected[first.no] !== undefined}
+                            onChange={(evt) => {
+                              ToggleItem(first, evt.target.checked)
+                            }}
+                          />
+                        </label>
+                      </td>
                     </tr>
-                  );
+                  )
 
                   return (
-                    <>
+                    <Fragment key={`f-${currCat}`}>
                       {firstRow}
                       {items.splice(1).map((r) => (
-                        <tr key={`tr-${currCat}-${r.no}`}>
+                        <tr
+                          key={`tr-${currCat}-${r.no}`}
+                          onClick={() => {
+                            ToggleItem(r)
+                          }}
+                        >
                           <td>{r.name}</td>
                           <td>{r.frequency}</td>
-                          <td></td>
+                          <td>
+                            <label className="checkbox">
+                              <input
+                                type="checkbox"
+                                checked={Selected[r.no] !== undefined}
+                                onChange={(evt) => {
+                                  ToggleItem(r, evt.target.checked)
+                                }}
+                              />
+                            </label>
+                          </td>
                         </tr>
                       ))}
-                    </>
-                  );
+                    </Fragment>
+                  )
                 })}
               </tbody>
             </table>
@@ -113,5 +207,17 @@ export default function DatasetPicker() {
         </div>
       </div>
     </div>
-  );
+  )
 }
+
+const UL = styled.ul`
+  li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span {
+      margin-left: 0.5rem;
+    }
+  }
+`
