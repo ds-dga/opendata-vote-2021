@@ -1,8 +1,7 @@
-import React from "react";
-import './BottomFloater.css'
+import React from "react"
+import "./BottomFloater.css"
 
 export default function BottomFloater(props) {
-  console.log('props: ', props)
   return (
     <div
       role="dialog"
@@ -13,5 +12,5 @@ export default function BottomFloater(props) {
     >
       {props.child && props.child}
     </div>
-  );
+  )
 }
