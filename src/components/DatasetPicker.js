@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useRef, useState } from "react"
-import * as _ from "lodash"
-import { Button, Label } from "../utils/typography"
-import AvailableDataset from "../utils/dataset.json"
-import SearchIcon from "../icons/SearchIcon"
-import TrashIcon from "../icons/TrashIcon"
-import styled from "styled-components"
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import * as _ from "lodash";
+import { Button, Label } from "../utils/typography";
+import AvailableDataset from "../utils/dataset.json";
+import SearchIcon from "../icons/SearchIcon";
+import styled from "styled-components";
+import Summary from "./Summary";
 
 /*
 no,name,frequency,topic,category
@@ -12,67 +12,67 @@ no,ชื่อชุดข้อมูลที่จะสำรวจ,คว�
 */
 
 export default function DatasetPicker() {
-  const [Q, SetQ] = useState("")
-  const [ErrMsg, SetErrMsg] = useState("")
-  const [Selected, SetSelection] = useState({})
-  const searchInput = useRef(null)
+  const [Q, SetQ] = useState("");
+  const [ErrMsg, SetErrMsg] = useState("");
+  const [Selected, SetSelection] = useState({});
+  const searchInput = useRef(null);
   const [FilteredData, SetFilteredData] = useState(
     _.sortBy(AvailableDataset, ["category", "frequency"])
-  )
-  const [Category, SetCategory] = useState([])
+  );
+  const [Category, SetCategory] = useState([]);
 
   const reachMaxSelection = () => {
     if (Object.keys(Selected).length >= 20) {
-      SetErrMsg("เลือกได้สูงสุด 20 รายการ")
-      alert("เลือกได้สูงสุด 20 รายการ")
-      return true
+      SetErrMsg("เลือกได้สูงสุด 20 รายการ");
+      alert("เลือกได้สูงสุด 20 รายการ");
+      return true;
     }
-    SetErrMsg("")
-    return false
-  }
+    SetErrMsg("");
+    return false;
+  };
 
   const addSelection = (item) => {
-    if (reachMaxSelection()) return
-    let a = {}
-    a[item.no] = item
+    if (reachMaxSelection()) return;
+    let a = {};
+    a[item.no] = item;
     SetSelection({
       ...Selected,
       ...a,
-    })
-  }
+    });
+  };
   const removeSelection = (item) => {
-    SetErrMsg("")
-    let a = { ...Selected }
-    delete a[item.no]
+    SetErrMsg("");
+    let a = { ...Selected };
+    delete a[item.no];
     SetSelection({
       ...a,
-    })
-  }
+    });
+  };
   const ToggleItem = (item, checked) => {
     if (checked === undefined) {
       if (Selected[item.no] === undefined) {
-        addSelection(item)
+        addSelection(item);
       } else {
-        removeSelection(item)
+        removeSelection(item);
       }
-      return
+      return;
     } else if (checked) {
-      addSelection(item)
+      addSelection(item);
     } else {
-      removeSelection(item)
+      removeSelection(item);
     }
-  }
+  };
 
   useEffect(() => {
-    SetCategory(Array.from(new Set(FilteredData.map((i) => i.category))))
-  }, [FilteredData])
+    SetCategory(Array.from(new Set(FilteredData.map((i) => i.category))));
+  }, [FilteredData]);
 
   useEffect(() => {
     const catData = AvailableDataset.filter(
       (i) => `${i.category} ${i.name}`.indexOf(Q) > -1
-    )
-    SetFilteredData(_.sortBy(catData, ["category", "frequency"]))
-  }, [Q])
+    );
+    SetFilteredData(_.sortBy(catData, ["category", "frequency"]));
+  }, [Q]);
 
   return (
     <div className="container">
@@ -82,6 +82,8 @@ export default function DatasetPicker() {
         </Label>
       </div>
 
+      <Summary Selected={Selected} ToggleItem={ToggleItem} />
+
       <div className="field">
         <p className="control has-icons-left">
           <input
@@ -90,8 +92,8 @@ export default function DatasetPicker() {
             defaultValue={Q}
             placeholder="ค้นหา..."
             onChange={(e) => {
-              const v = e.target.value.trim()
-              SetQ(v)
+              const v = e.target.value.trim();
+              SetQ(v);
             }}
             autoComplete="off"
             ref={searchInput}
@@ -107,25 +109,6 @@ export default function DatasetPicker() {
           <div className="message-body">{ErrMsg}</div>
         </article>
       )}
-
-      {/* TODO: make this thing in Modal */}
-      <UL>
-        {Object.keys(Selected).map((k, ind) => (
-          <li key={`sel-${k}`}>
-            <Button
-              className={"button is-danger is-light is-normal"}
-              onClick={() => {
-                ToggleItem(Selected[k], false)
-              }}
-            >
-              <TrashIcon />
-            </Button>{" "}
-            <span>
-              {ind + 1}. {Selected[k].name}
-            </span>
-          </li>
-        ))}
-      </UL>
 
       <div className="columns">
         <div className="column">
@@ -144,16 +127,16 @@ export default function DatasetPicker() {
                   const items = _.sortBy(
                     FilteredData.filter((i) => i.category === currCat),
                     ["frequency"]
-                  )
+                  );
                   if (items.length === 0) {
-                    return <></>
+                    return <></>;
                   }
-                  const first = items[0]
+                  const first = items[0];
                   const firstRow = (
                     <tr
                       key={`tr-${currCat}-${first.no}`}
                       onClick={() => {
-                        ToggleItem(first)
+                        ToggleItem(first);
                       }}
                     >
                       <td rowSpan={items.length}>{first.category}</td>
@@ -165,13 +148,13 @@ export default function DatasetPicker() {
                             type="checkbox"
                             checked={Selected[first.no] !== undefined}
                             onChange={(evt) => {
-                              ToggleItem(first, evt.target.checked)
+                              ToggleItem(first, evt.target.checked);
                             }}
                           />
                         </label>
                       </td>
                     </tr>
-                  )
+                  );
 
                   return (
                     <Fragment key={`f-${currCat}`}>
@@ -180,7 +163,7 @@ export default function DatasetPicker() {
                         <tr
                           key={`tr-${currCat}-${r.no}`}
                           onClick={() => {
-                            ToggleItem(r)
+                            ToggleItem(r);
                           }}
                         >
                           <td>{r.name}</td>
@@ -191,7 +174,7 @@ export default function DatasetPicker() {
                                 type="checkbox"
                                 checked={Selected[r.no] !== undefined}
                                 onChange={(evt) => {
-                                  ToggleItem(r, evt.target.checked)
+                                  ToggleItem(r, evt.target.checked);
                                 }}
                               />
                             </label>
@@ -199,25 +182,18 @@ export default function DatasetPicker() {
                         </tr>
                       ))}
                     </Fragment>
-                  )
+                  );
                 })}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      <Blocker />
     </div>
-  )
+  );
 }
 
-const UL = styled.ul`
-  li {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    span {
-      margin-left: 0.5rem;
-    }
-  }
+const Blocker = styled.div`
+  height: 7rem;
 `
