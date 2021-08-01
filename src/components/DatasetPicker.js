@@ -5,13 +5,15 @@ import AvailableDataset from "../utils/dataset.json"
 import SearchIcon from "../icons/SearchIcon"
 import styled from "styled-components"
 import Summary from "./Summary"
+import { Container } from "./First"
+import { LogoContainer } from "./Thanks"
 
 /*
 no,name,frequency,topic,category
 no,ชื่อชุดข้อมูลที่จะสำรวจ,ความละเอียดข้อมูล,C_เรื่องที่เกี่ยวกับข้อมูล,ประเภทข้อมูล
 */
 
-export default function DatasetPicker() {
+export default function DatasetPicker({ HandleModeChange, Mode }) {
   const [Q, SetQ] = useState("")
   const [ErrMsg, SetErrMsg] = useState("")
   const [SelCat, SetCat] = useState("")
@@ -76,14 +78,20 @@ export default function DatasetPicker() {
   }, [Q])
 
   return (
-    <div className="container">
+    <Container className="container">
       <div className="columns">
         <Label className="column">
           <h2 className="title is-3">ร่วมกิจกรรมสำรวจชุดข้อมูล Open data</h2>
         </Label>
       </div>
 
-      <Summary Selected={Selected} ToggleItem={ToggleItem} />
+      <Summary
+        Selected={Selected}
+        ToggleItem={ToggleItem}
+        Mode={Mode}
+        HandleModeChange={HandleModeChange}
+        ErrMsg={ErrMsg}
+      />
 
       <div className="field">
         <p className="control has-icons-left">
@@ -126,11 +134,11 @@ export default function DatasetPicker() {
         })}
       </FlexBox>
 
-      {ErrMsg.length > 0 && (
+      {/* {ErrMsg.length > 0 && (
         <article className="message is-danger">
           <div className="message-body">{ErrMsg}</div>
         </article>
-      )}
+      )} */}
 
       <Blocker height={"2rem"} />
 
@@ -143,8 +151,32 @@ export default function DatasetPicker() {
         />
       )}
 
-      <Blocker />
-    </div>
+      <Blocker height={"3rem"} />
+      <footer className="has-text-centered">
+        <p>สนับสนุนกิจกรรมโดย</p>
+        <LogoContainer>
+          <figure className="image is-96x96">
+            <img
+              className="is-rounded"
+              src="https://static.10ninox.com/goth/android-chrome-512x512.png"
+            />
+          </figure>
+          <figure className="image is-96x96">
+            <img
+              className="is-rounded"
+              src="https://static.10ninox.com/goth/android-chrome-512x512.png"
+            />
+          </figure>
+          <figure className="image is-96x96">
+            <img
+              className="is-rounded"
+              src="https://static.10ninox.com/goth/android-chrome-512x512.png"
+            />
+          </figure>
+        </LogoContainer>
+      </footer>
+      <Blocker height={"9rem"} />
+    </Container>
   )
 }
 
@@ -285,7 +317,7 @@ const Blocker = styled.div`
   height: ${(props) => props.height || "7rem"};
 `
 
-const FlexBox = styled.div`
+export const FlexBox = styled.div`
   display: flex;
   flex-wrap: wrap;
 

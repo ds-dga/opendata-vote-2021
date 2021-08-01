@@ -1,26 +1,27 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
-import { useCookies } from "react-cookie";
-import EmailIcon from "../icons/EmailIcon";
-import TelephoneIcon from "../icons/TelephoneIcon";
-import { Button, Label } from "../utils/typography";
+import React from "react"
+import { useForm } from "react-hook-form"
+import styled from "styled-components"
+import { useCookies } from "react-cookie"
+import EmailIcon from "../icons/EmailIcon"
+import TelephoneIcon from "../icons/TelephoneIcon"
+import { Button, Label } from "../utils/typography"
+import { LogoContainer } from "./Thanks"
 
 export default function First({ HandleModeChange }) {
-  const [cookies, setCookie] = useCookies(["mode", "email", "phone"]);
+  const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: "onChange" })
   const onSubmit = (data) => {
-    setCookie("mode", "lottery");
-    setCookie("email", data.email);
-    setCookie("phone", data.phone);
-    HandleModeChange({ mode: "lottery", ...data });
-  };
+    setCookie("mode", "lottery")
+    setCookie("email", data.email)
+    setCookie("phone", data.phone)
+    HandleModeChange({ mode: "lottery", ...data })
+  }
   return (
-    <div className="container">
+    <Container className="container">
       <Intro />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="columns">
@@ -100,12 +101,12 @@ export default function First({ HandleModeChange }) {
                 className="button is-link"
                 onClick={async () => {
                   if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
-                    return;
+                    return
 
-                  setCookie("mode", "anonymous");
-                  setCookie("email", "");
-                  setCookie("phone", "");
-                  HandleModeChange({ mode: "anonymous" });
+                  setCookie("mode", "anonymous")
+                  setCookie("email", "")
+                  setCookie("phone", "")
+                  HandleModeChange({ mode: "anonymous" })
                 }}
               >
                 ลงทะเบียนเข้าร่วม
@@ -116,8 +117,8 @@ export default function First({ HandleModeChange }) {
           </div>
         </div>
       </form>
-    </div>
-  );
+    </Container>
+  )
 }
 
 function Intro() {
@@ -127,7 +128,28 @@ function Intro() {
         <Label className="column">
           <h2 className="title is-3">ร่วมกิจกรรมสำรวจชุดข้อมูล Open data</h2>
         </Label>
-        <div className="column"></div>
+        <div className="column">
+          <LogoContainer>
+            <figure className="image is-96x96">
+              <img
+                className="is-rounded"
+                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
+              />
+            </figure>
+            <figure className="image is-96x96">
+              <img
+                className="is-rounded"
+                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
+              />
+            </figure>
+            <figure className="image is-96x96">
+              <img
+                className="is-rounded"
+                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
+              />
+            </figure>
+          </LogoContainer>
+        </div>
       </div>
       <div className="columns">
         <Label className="column has-text-right is-narrow">ที่มา</Label>
@@ -160,7 +182,7 @@ function Intro() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 const ButtonContainer = styled.div`
@@ -168,4 +190,11 @@ const ButtonContainer = styled.div`
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
-`;
+`
+
+export const Container = styled.div`
+  @media screen and (max-width: 1024px) {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+`
