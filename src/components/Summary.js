@@ -9,6 +9,9 @@ export default function Summary({ Selected, ToggleItem }) {
   const [ModalVisible, SetModalVisible] = useState(false)
   const total = Object.keys(Selected).length
   const maximum = 20
+
+  const categories = Object.keys(Selected).map((k) => Selected[k].category)
+  const distinctCategory = Array.from(new Set(categories))
   return (
     <>
       <Modal
@@ -20,26 +23,38 @@ export default function Summary({ Selected, ToggleItem }) {
           </button>
         }
         content={
-          <>
-            <UL>
-              {total === 0 && <p>ยังไม่ได้เลือกรายการใดๆ</p>}
-              {Object.keys(Selected).map((k, ind) => (
-                <li key={`sel-${k}`}>
-                  <Button
-                    className={"button is-danger is-light is-normal"}
-                    onClick={() => {
-                      ToggleItem(Selected[k], false)
-                    }}
-                  >
-                    <TrashIcon />
-                  </Button>{" "}
-                  <span>
-                    {ind + 1}. {Selected[k].name}
-                  </span>
-                </li>
+          <Container>
+            <h5 className="title is-5">ประเภทข้อมูล</h5>
+            <div className="category">
+              {distinctCategory.map((cat) => (
+                <div className="card">
+                  {cat} #{categories.filter((c) => c == cat).length}
+                </div>
               ))}
-            </UL>
-          </>
+            </div>
+            <br />
+            <h5 className="title is-5">รายการข้อมูลที่เลือก</h5>
+            <div>
+              <UL>
+                {total === 0 && <p>ยังไม่ได้เลือกรายการใดๆ</p>}
+                {Object.keys(Selected).map((k, ind) => (
+                  <li key={`sel-${k}`}>
+                    <Button
+                      className={"button is-danger is-light is-normal"}
+                      onClick={() => {
+                        ToggleItem(Selected[k], false)
+                      }}
+                    >
+                      <TrashIcon />
+                    </Button>{" "}
+                    <span>
+                      {ind + 1}. {Selected[k].name}
+                    </span>
+                  </li>
+                ))}
+              </UL>
+            </div>
+          </Container>
         }
       />
       <BottomFloater
@@ -89,5 +104,20 @@ const UL = styled.ul`
     span {
       margin-left: 0.5rem;
     }
+  }
+`
+
+const Container = styled.div`
+  div.category {
+    font-size: 0.8rem;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  div.card {
+    flex: 1 1 30%;
+    margin: 3px;
+    padding: 3px 10px;
+    text-align: center;
+    min-height: 2rem;
   }
 `

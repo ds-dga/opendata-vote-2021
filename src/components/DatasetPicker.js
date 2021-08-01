@@ -106,7 +106,9 @@ export default function DatasetPicker() {
         </p>
       </div>
 
+      <h4 className="title is-5">ประเภทข้อมูล</h4>
       <FlexBox>
+        {Category.length === 0 && <p>ไม่พบข้อมูล</p>}
         {Category.map((currCat, ind) => {
           return (
             <div
@@ -163,9 +165,10 @@ function OneCategoryList({ SelCat, FilteredData, ToggleItem, Selected }) {
                 <th>Vote</th>
               </tr>
             </thead>
-            <tbody>
+            <TBODY>
               {items.map((r) => (
                 <tr
+                  className={`${Selected[r.no] !== undefined ? "active" : ""}`}
                   key={`tr-${SelCat}-${r.no}`}
                   onClick={() => {
                     ToggleItem(r)
@@ -186,7 +189,7 @@ function OneCategoryList({ SelCat, FilteredData, ToggleItem, Selected }) {
                   </td>
                 </tr>
               ))}
-            </tbody>
+            </TBODY>
           </table>
         </div>
       </div>
@@ -294,5 +297,15 @@ const FlexBox = styled.div`
 
   div.box.is-selected {
     background-color: #fffaeb !important;
+  }
+`
+
+const TBODY = styled.tbody`
+  tr {
+    cursor: pointer;
+  }
+
+  tr.active {
+    background-color: #fffaeb;
   }
 `
