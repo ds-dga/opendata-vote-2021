@@ -1,10 +1,11 @@
 import React from "react"
 import styled from "styled-components"
 import { Label } from "../utils/typography"
+import { Container } from "./First"
 
 export default function Thanks({ HandleModeChange }) {
   return (
-    <div className="container">
+    <Container className="container">
       <div className="columns">
         <Label className="column">
           <h2 className="title is-3">กิจกรรมสำรวจชุดข้อมูล Open data</h2>
@@ -58,7 +59,7 @@ export default function Thanks({ HandleModeChange }) {
           </LogoContainer>
         </div>
       </div>
-    </div>
+    </Container>
   )
 }
 

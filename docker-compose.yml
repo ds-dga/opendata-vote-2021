@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  opendata-voter:
+    image: dk-reg.10ninox.com/ds-dga/opendata-vote:latest
+    expose:
+      - 80
+    networks:
+      - proxy_default
+
+networks:
+  proxy_default:
+    external: true
