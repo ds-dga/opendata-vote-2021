@@ -1,6 +1,12 @@
 import React from "react"
 
-export default function Modal({ isActive, handleClose, content, footer, header }) {
+export default function Modal({
+  isActive,
+  handleClose,
+  content,
+  footer,
+  header,
+}) {
   return (
     <div className={`modal ${isActive ? "is-active" : ""}`}>
       <div className="modal-background"></div>
@@ -21,7 +27,11 @@ export default function Modal({ isActive, handleClose, content, footer, header }
           </footer>
         )}
       </div>
-      <button class="modal-close is-large" aria-label="close" onClick={() => handleClose()}></button>
+      <button
+        className="modal-close is-large"
+        aria-label="close"
+        onClick={() => handleClose()}
+      ></button>
     </div>
   )
 }

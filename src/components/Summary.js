@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
+import { useForm } from "react-hook-form"
+import { useCookies } from "react-cookie"
 import { Button } from "../utils/typography"
 import BottomFloater from "./BottomFloater"
 import Modal from "./Modal"
@@ -14,81 +16,137 @@ export default function Summary({
   ErrMsg,
 }) {
   const [ModalVisible, SetModalVisible] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState,
+    formState: { errors },
+  } = useForm({ mode: "onChange" })
+  const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
   const total = Object.keys(Selected).length
   const maximum = 20
 
   const categories = Object.keys(Selected).map((k) => Selected[k].category)
   const distinctCategory = Array.from(new Set(categories))
+
+  const onSubmit = (data) => {
+    let result = []
+    Object.keys(Selected).map((k) => {
+      const t = data[`comment-${k}`]
+      let o = {
+        ...Selected[k],
+        comment: t,
+      }
+      result.push(o)
+      return o
+    })
+    let body = {
+      result,
+      email: "anonymous",
+      phone: "-",
+      timestamp: +new Date() / 1000,
+    }
+    if (cookies.mode === "lottery") {
+      body["email"] = cookies.email
+      body["phone"] = cookies.phone
+    }
+    console.log("onSubmit result: ", body)
+    // TODO: add mutation here
+    HandleModeChange({ ...Mode, mode: "confirm" })
+  }
+
   return (
     <>
       <Modal
         handleClose={() => SetModalVisible(false)}
         isActive={ModalVisible}
-        footer={
-          <>
-            <button
-              className="button"
-              onClick={() => {
-                HandleModeChange({ mode: "", email: "", phone: "" })
-              }}
-            >
-              เริ่มต้นใหม่
-            </button>
-            <button className="button" onClick={() => SetModalVisible(false)}>
-              Back
-            </button>
-            {total === maximum && (
-              <button
-                className="button"
-                onClick={() => {
-                  if (
-                    !window.confirm(
-                      "หลังจากยืนยันแล้ว หากต้องการเปลี่ยนแปลงจะต้องเริ่มต้นใหม่เท่านั้น \n\nยืนยันที่จะส่งความเห็นของท่าน?"
-                    )
-                  )
-                    return
-
-                  // TODO: push data to server
-                  HandleModeChange({ ...Mode, mode: "confirm" })
-                }}
-              >
-                ส่งความเห็น
-              </button>
-            )}
-          </>
-        }
+        footer={<></>}
         content={
           <Container>
             <h5 className="title is-5">ประเภทข้อมูล</h5>
             <FlexBox className="category">
               {distinctCategory.map((cat) => (
-                <div className="card">
-                  {cat} #{categories.filter((c) => c == cat).length}
+                <div key={`dc-${cat}`} className="card">
+                  {cat} #{categories.filter((c) => c === cat).length}
                 </div>
               ))}
             </FlexBox>
             <br />
             <h5 className="title is-5">รายการข้อมูลที่เลือก</h5>
-            <div>
-              <UL>
-                {total === 0 && <p>ยังไม่ได้เลือกรายการใดๆ</p>}
-                {Object.keys(Selected).map((k, ind) => (
-                  <li key={`sel-${k}`}>
-                    <Button
-                      className={"button is-danger is-light is-normal"}
-                      onClick={() => {
-                        ToggleItem(Selected[k], false)
-                      }}
-                    >
-                      <TrashIcon />
-                    </Button>{" "}
-                    <span>
-                      {ind + 1}. {Selected[k].name}
-                    </span>
-                  </li>
-                ))}
-              </UL>
-            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div>
+                <UL>
+                  {total === 0 && <p>ยังไม่ได้เลือกรายการใดๆ</p>}
+                  {Object.keys(Selected).map((k, ind) => (
+                    <li key={`sel-${k}`}>
+                      <Button
+                        className={"button is-danger is-light is-normal"}
+                        onClick={() => {
+                          ToggleItem(Selected[k], false)
+                        }}
+                      >
+                        <TrashIcon />
+                      </Button>
+                      <div className="d">
+                        <div>
+                          {ind + 1}. {Selected[k].name}
+                        </div>
+                        <div className="field">
+                          <div className="control">
+                            <input
+                              className="input"
+                              type={`comment-${k}`}
+                              placeholder={`ความเห็นเพิ่มเติม`}
+                              {...register(`comment-${k}`)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </UL>
+              </div>
+
+              <hr />
+              <button
+                className="button is-warning"
+                type="button"
+                onClick={() => {
+                  HandleModeChange({ mode: "", email: "", phone: "" })
+                }}
+              >
+                เริ่มต้นใหม่
+              </button>
+              <button
+                className="button"
+                type="button"
+                onClick={() => {
+                  SetModalVisible(false)
+                  return
+                }}
+              >
+                Back
+              </button>
+              {total > 0 && (
+                <button
+                  className="button is-success"
+                  type="submit"
+                  onClick={() => {
+                    if (
+                      !window.confirm(
+                        "หลังจากยืนยันแล้ว หากต้องการเปลี่ยนแปลงจะต้องเริ่มต้นใหม่เท่านั้น \n\nยืนยันที่จะส่งความเห็นของท่าน?"
+                      )
+                    )
+                      return
+
+                    console.log("here --> ", handleSubmit)
+                    console.log("formState ---> ", formState)
+                  }}
+                >
+                  ส่งความเห็น
+                </button>
+              )}
+            </form>
           </Container>
         }
       />
@@ -108,7 +166,9 @@ export default function Summary({
                     SetModalVisible(true)
                   }}
                 >
-                  {total === maximum ? 'ตรวจสอบข้อมูลที่เลือกก่อนส่ง' : 'ดูรายการที่เลือกแล้ว'}
+                  {total > 0
+                    ? "ตรวจสอบข้อมูลที่เลือกก่อนส่ง"
+                    : "ดูรายการที่เลือกแล้ว"}
                 </Button>
               </Small>
             </div>
@@ -137,7 +197,11 @@ const UL = styled.ul`
   li {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
+
+    div.d {
+      margin-left: 0.5rem;
+    }
 
     span {
       margin-left: 0.5rem;

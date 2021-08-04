@@ -93,9 +93,9 @@ export default function First({ HandleModeChange }) {
                 type="submit"
                 disabled={Object.keys(errors).length > 0}
               >
-                ลงทะเบียนเข้าร่วม
+                ลงทะเบียน
                 <br />
-                กิจกรรมและรับรางวัล
+                เข้าร่วมกิจกรรม
               </Button>
               <Button
                 className="button is-link"
@@ -109,9 +109,9 @@ export default function First({ HandleModeChange }) {
                   HandleModeChange({ mode: "anonymous" })
                 }}
               >
-                ลงทะเบียนเข้าร่วม
+                โหวตเลย
                 <br />
-                ไม่ประสงค์รับรางวัล
+                โดยไม่ลงทะเบียนรับรางวัล
               </Button>
             </ButtonContainer>
           </div>
@@ -167,8 +167,7 @@ function Intro() {
         <Label className="column has-text-right is-narrow">กติกา</Label>
         <div className="column is-three-quarters">
           <ul>
-            <li>ให้ Vote คนละ 20 รายการ</li>
-            <li>สามารถแสดงความเห็นได้อย่างเต็มที่</li>
+            <li>ให้โหวดคนละไม่เกิน 20 รายการ</li>
             <li>
               ระยะเวลาสำรวจ 1 เดือนตั้งแต่วันที่ * สิงหาคม - ** กันยายน 2564
             </li>
@@ -177,7 +176,7 @@ function Intro() {
               และเบอร์โทรศัพท์ที่ลงทะเบียนเท่านั้น
             </li>
             <li>ประกาศผลการจับฉลากที่ data.go.th ในวันที่ *** กันยายน 2564</li>
-            <li>เจ้าหน้าที่ทำการติดตามเพื่อส่งของรางวัล (กรณีเป็นสิ่งของ)</li>
+            <li>กรณีที่ท่านเป็นผู้โชคดี เจ้าหน้าที่จะทำการติดต่อกลับไปเพื่อส่งของรางวัล</li>
           </ul>
         </div>
       </div>

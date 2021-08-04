@@ -117,21 +117,39 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
       <h4 className="title is-5">ประเภทข้อมูล</h4>
       <FlexBox>
         {Category.length === 0 && <p>ไม่พบข้อมูล</p>}
-        {Category.map((currCat, ind) => {
-          return (
-            <div
-              key={`tile-${ind}`}
-              className={`box ${SelCat === currCat ? "is-selected" : ""}`}
-              onClick={() => {
-                SetCat(SelCat === currCat ? "" : currCat)
-              }}
+        {SelCat !== "" && (
+          <>
+            <nav
+              className="breadcrumb has-arrow-separator"
+              aria-label="breadcrumbs"
             >
-              {/* <p className="title">{currCat}</p> */}
-              {/* <p className="subtitle">{currCat}</p> */}
-              <div className="content">{currCat}</div>
-            </div>
-          )
-        })}
+              <ul>
+                <li>
+                  <a onClick={() => SetCat("")}>ทั้งหมด</a>
+                </li>
+                <li className="is-active">
+                <a aria-current="page">{SelCat}</a>
+                </li>
+              </ul>
+            </nav>
+          </>
+        )}
+        {SelCat === "" &&
+          Category.map((currCat, ind) => {
+            return (
+              <div
+                key={`tile-${ind}`}
+                className={`box ${SelCat === currCat ? "is-selected" : ""}`}
+                onClick={() => {
+                  SetCat(SelCat === currCat ? "" : currCat)
+                }}
+              >
+                {/* <p className="title">{currCat}</p> */}
+                {/* <p className="subtitle">{currCat}</p> */}
+                <div className="content">{currCat}</div>
+              </div>
+            )
+          })}
       </FlexBox>
 
       {/* {ErrMsg.length > 0 && (
