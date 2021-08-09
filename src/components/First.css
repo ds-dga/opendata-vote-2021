@@ -1,0 +1,20 @@
+.button.is-light-blue {
+  background-color: #14c5ef;
+  border-color: transparent;
+  color: #fff;
+}
+.button.is-light-blue:hover {
+  background-color: #14c3efe1;
+  border-color: transparent;
+  color: #fff;
+}
+.button.is-lime-green {
+  background-color: #bfe600;
+  border-color: transparent;
+  color: #000;
+}
+.button.is-lime-green:hover {
+  background-color: #bfe600e1;
+  border-color: transparent;
+  color: #000;
+}

@@ -1,12 +1,15 @@
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import * as _ from "lodash"
-import { Label } from "../utils/typography"
+import { H4, Label } from "../utils/typography"
 import AvailableDataset from "../utils/dataset.json"
 import SearchIcon from "../icons/SearchIcon"
 import styled from "styled-components"
 import Summary from "./Summary"
 import { Container } from "./First"
 import { LogoContainer } from "./Thanks"
+import LogoDataGo from "../logo/data-go-th.png"
+import LogoDGA from "../logo/dga.png"
+import LogoDigi from "../logo/digi.png"
 
 /*
 no,name,frequency,topic,category
@@ -96,7 +99,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
       <div className="field">
         <p className="control has-icons-left">
           <input
-            className="input is-large"
+            className="input"
             type="text"
             defaultValue={Q}
             placeholder="ค้นหา..."
@@ -112,9 +115,16 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
             <SearchIcon />
           </span>
         </p>
+        <br />
+        <p>
+          คำอธิบาย:
+          กรุณาเลือกประเภทข้อมูลและรายชื่อชุดข้อมูลที่ท่านสนใจในการนำมาเปิดเผยต่อสาธารณะ
+        </p>
       </div>
 
-      <h4 className="title is-5">ประเภทข้อมูล</h4>
+      <H4 className="title is-5" fontWeight={600}>
+        ประเภทข้อมูล
+      </H4>
       <FlexBox>
         {Category.length === 0 && <p>ไม่พบข้อมูล</p>}
         {SelCat !== "" && (
@@ -125,10 +135,10 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
             >
               <ul>
                 <li>
-                  <a onClick={() => SetCat("")}>ทั้งหมด</a>
+                  <a onClick={() => SetCat("")}>ย้อนกลับ</a>
                 </li>
                 <li className="is-active">
-                <a aria-current="page">{SelCat}</a>
+                  <a aria-current="page">{SelCat}</a>
                 </li>
               </ul>
             </nav>
@@ -173,23 +183,14 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
       <footer className="has-text-centered">
         <p>สนับสนุนกิจกรรมโดย</p>
         <LogoContainer>
-          <figure className="image is-96x96">
-            <img
-              className="is-rounded"
-              src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-            />
+          <figure className="image is-128x128">
+            <img alt="DGA" src={LogoDGA} />
           </figure>
-          <figure className="image is-96x96">
-            <img
-              className="is-rounded"
-              src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-            />
+          <figure className="image is-128x128">
+            <img alt="Digi" src={LogoDigi} />
           </figure>
-          <figure className="image is-96x96">
-            <img
-              className="is-rounded"
-              src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-            />
+          <figure className="image is-128x128">
+            <img alt="Data.go.th" src={LogoDataGo} />
           </figure>
         </LogoContainer>
       </footer>

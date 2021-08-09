@@ -16,12 +16,7 @@ export default function Summary({
   ErrMsg,
 }) {
   const [ModalVisible, SetModalVisible] = useState(false)
-  const {
-    register,
-    handleSubmit,
-    formState,
-    formState: { errors },
-  } = useForm({ mode: "onChange" })
+  const { register, handleSubmit, formState } = useForm({ mode: "onChange" })
   const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
   const total = Object.keys(Selected).length
   const maximum = 20
@@ -51,6 +46,7 @@ export default function Summary({
       body["phone"] = cookies.phone
     }
     console.log("onSubmit result: ", body)
+    setCookie("mode", "confirm")
     // TODO: add mutation here
     HandleModeChange({ ...Mode, mode: "confirm" })
   }
@@ -112,6 +108,9 @@ export default function Summary({
                 className="button is-warning"
                 type="button"
                 onClick={() => {
+                  setCookie("mode", "")
+                  setCookie("email", "")
+                  setCookie("phone", "")
                   HandleModeChange({ mode: "", email: "", phone: "" })
                 }}
               >
@@ -138,9 +137,6 @@ export default function Summary({
                       )
                     )
                       return
-
-                    console.log("here --> ", handleSubmit)
-                    console.log("formState ---> ", formState)
                   }}
                 >
                   ส่งความเห็น

@@ -6,6 +6,10 @@ import EmailIcon from "../icons/EmailIcon"
 import TelephoneIcon from "../icons/TelephoneIcon"
 import { Button, Label } from "../utils/typography"
 import { LogoContainer } from "./Thanks"
+import LogoDataGo from "../logo/data-go-th.png"
+import LogoDGA from "../logo/dga.png"
+import LogoDigi from "../logo/digi.png"
+import "./First.css"
 
 export default function First({ HandleModeChange }) {
   const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
@@ -26,7 +30,7 @@ export default function First({ HandleModeChange }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="columns">
           <div className="column is-narrow">
-            <Label>เข้าร่วมกิจกรรม</Label>
+            <Label fontWeight={600}>เข้าร่วมกิจกรรม</Label>
           </div>
           <div className="column is-narrow">
             <div className="field">
@@ -89,7 +93,8 @@ export default function First({ HandleModeChange }) {
           <div className="column">
             <ButtonContainer className="buttons are-medium is-centered">
               <Button
-                className="button is-primary"
+                className="button is-lime-green"
+                fontWeight={500}
                 type="submit"
                 disabled={Object.keys(errors).length > 0}
               >
@@ -98,10 +103,11 @@ export default function First({ HandleModeChange }) {
                 เข้าร่วมกิจกรรม
               </Button>
               <Button
-                className="button is-link"
+                className="button is-light-blue"
+                fontWeight={500}
                 onClick={async () => {
-                  if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
-                    return
+                  // if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
+                  //   return
 
                   setCookie("mode", "anonymous")
                   setCookie("email", "")
@@ -130,54 +136,66 @@ function Intro() {
         </Label>
         <div className="column">
           <LogoContainer>
-            <figure className="image is-96x96">
-              <img
-                className="is-rounded"
-                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-              />
+            <figure className="image is-128x128">
+              <img alt="DGA" src={LogoDGA} />
             </figure>
-            <figure className="image is-96x96">
-              <img
-                className="is-rounded"
-                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-              />
+            <figure className="image is-128x128">
+              <img alt="Digi" src={LogoDigi} />
             </figure>
-            <figure className="image is-96x96">
-              <img
-                className="is-rounded"
-                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-              />
+            <figure className="image is-128x128">
+              <img alt="Data.go.th" src={LogoDataGo} />
             </figure>
           </LogoContainer>
         </div>
       </div>
       <div className="columns">
-        <Label className="column has-text-right is-narrow">ที่มา</Label>
+        <Label className="column is-narrow" fontWeight={600}>
+          ที่มา
+        </Label>
         <div className="column is-three-quarters">
-          จากการรวบรวมความต้องการ Open data ในหน่วยงานราชการ
-          แสดงให้เห้นถึงรายการข้อมูล Open data
-          ที่สามารถใช้ประกอบการทำงานและนำไปใช้วิเคราะห์ต่อยอดในการทำงานของหน่วยงานราชการอื่นๆ
-          ได้ สำนักพัฒนารัฐบาลดิจิทัล (องค์การมหาชน) ในฐานะผู้ผลักดันการนำข้อมูล
-          Open data ไปใช้ประโยชน์ จึงจัดกิจกรรมนี้ขึ้น
-          เพื่อให้ประชาชนมีส่วนร่วมในการแสดงความเห็นรายชื่อชุดข้อมูลที่ควรค่าในการนำมาเปิดเผยต่อสาธารณะ
-          และเป็นส่วนหนึ่งในการผลักดันการพัฒนาอย่างยั่งยืน
+          <p>
+            จากการรวบรวมความต้องการ Open data ในหน่วยงานราชการ
+            แสดงให้เห็นถึงรายการข้อมูล Open data
+            ที่สามารถใช้ประกอบการวิเคราะห์และต่อยอดในการทำงานของหน่วยงานราชการอื่นๆ
+            ได้
+          </p>
+          <p>
+            สำนักพัฒนารัฐบาลดิจิทัล (องค์การมหาชน) ในฐานะผู้ผลักดันการนำข้อมูล
+            Open data ไปใช้ประโยชน์ จึงจัดกิจกรรมนี้ขึ้น
+            เพื่อให้ประชาชนมีส่วนร่วมในการแสดงความเห็นรายชื่อชุดข้อมูลที่ควรค่าในการนำมาเปิดเผยต่อสาธารณะ
+            และเป็นส่วนหนึ่งในการผลักดันการพัฒนาอย่างยั่งยืน
+          </p>
         </div>
       </div>
       <div className="columns">
-        <Label className="column has-text-right is-narrow">กติกา</Label>
+        <Label className="column is-narrow" fontWeight={600}>
+          กติกา
+        </Label>
         <div className="column is-three-quarters">
           <ul>
-            <li>ให้โหวดคนละไม่เกิน 20 รายการ</li>
+            <li>สามารถโหวตได้ท่านละไม่เกิน 20 รายการ</li>
+            <li>เริ่มสำรวจตั้งแต่วันที่ 16 สิงหาคม - 27 กันยายน 2564</li>
             <li>
-              ระยะเวลาสำรวจ 1 เดือนตั้งแต่วันที่ * สิงหาคม - ** กันยายน 2564
+              สุ่มจับรางวัลจาก email และเบอร์โทรศัพท์ที่ท่านลงทะเบียนเท่านั้น
             </li>
             <li>
-              จับรางวัลจากการสุ่ม โดยจะจับจาก email
-              และเบอร์โทรศัพท์ที่ลงทะเบียนเท่านั้น
+              ประกาศผลรางวัลที่{" "}
+              <a href="https://data.go.th">https://data.go.th</a> ในวันที่ 30
+              กันยายน 2564
             </li>
-            <li>ประกาศผลการจับฉลากที่ data.go.th ในวันที่ *** กันยายน 2564</li>
-            <li>กรณีที่ท่านเป็นผู้โชคดี เจ้าหน้าที่จะทำการติดต่อกลับไปเพื่อส่งของรางวัล</li>
+            <li>
+              กรณีที่ท่านเป็นผู้โชคดี
+              เจ้าหน้าที่จะทำการติดต่อกลับไปเพื่อนำส่งของรางวัล
+            </li>
           </ul>
+        </div>
+      </div>
+      <div className="columns">
+        <Label className="column is-narrow" fontWeight={600}>
+          รางวัล
+        </Label>
+        <div className="column is-three-quarters">
+          <p>xxxxx 1 ท่านต่อ 1 สิทธิ์</p>
         </div>
       </div>
     </>
@@ -192,6 +210,8 @@ const ButtonContainer = styled.div`
 `
 
 export const Container = styled.div`
+  padding-top: 10px;
+
   @media screen and (max-width: 1024px) {
     padding-right: 5px;
     padding-left: 5px;

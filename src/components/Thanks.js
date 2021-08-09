@@ -2,6 +2,9 @@ import React from "react"
 import styled from "styled-components"
 import { Label } from "../utils/typography"
 import { Container } from "./First"
+import LogoDataGo from "../logo/data-go-th.png"
+import LogoDGA from "../logo/dga.png"
+import LogoDigi from "../logo/digi.png"
 
 export default function Thanks({ HandleModeChange }) {
   return (
@@ -39,22 +42,13 @@ export default function Thanks({ HandleModeChange }) {
         <div className="column">
           <LogoContainer>
             <figure className="image is-128x128">
-              <img
-                className="is-rounded"
-                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-              />
+              <img alt="DGA" src={LogoDGA} />
             </figure>
             <figure className="image is-128x128">
-              <img
-                className="is-rounded"
-                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-              />
+              <img alt="Digi" src={LogoDigi} />
             </figure>
             <figure className="image is-128x128">
-              <img
-                className="is-rounded"
-                src="https://static.10ninox.com/goth/android-chrome-512x512.png"
-              />
+              <img alt="Data.go.th" src={LogoDataGo} />
             </figure>
           </LogoContainer>
         </div>
@@ -67,4 +61,9 @@ export const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+  figure.image {
+    display: grid;
+    align-content: center;
+  }
 `
