@@ -6,7 +6,7 @@ import LogoDataGo from "../logo/data-go-th.png"
 import LogoDGA from "../logo/dga.png"
 import LogoDigi from "../logo/digi.png"
 
-export default function Thanks({ HandleModeChange }) {
+export default function Thanks({ HandleModeChange, setCookies }) {
   return (
     <Container className="container">
       <div className="columns">
@@ -33,6 +33,9 @@ export default function Thanks({ HandleModeChange }) {
           <button
             className="button is-small is-warning is-light"
             onClick={() => {
+              setCookies("mode", "")
+              setCookies("email", "")
+              setCookies("phone", "")
               HandleModeChange({ mode: "", email: "", phone: "" })
             }}
           >

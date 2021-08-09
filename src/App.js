@@ -6,7 +6,7 @@ import DatasetPicker from "./components/DatasetPicker"
 import Thanks from "./components/Thanks"
 
 export default function App() {
-  const [cookies] = useCookies(["mode", "email", "phone"])
+  const [cookies, setCookies] = useCookies(["mode", "email", "phone"])
   const [Mode, SetMode] = useState({
     mode: cookies.mode || "",
     email: cookies.email || "",
@@ -24,7 +24,9 @@ export default function App() {
       {["lottery", "anonymous"].includes(Mode.mode) && (
         <DatasetPicker Mode={Mode} HandleModeChange={SetMode} />
       )}
-      {Mode.mode === "confirm" && <Thanks HandleModeChange={SetMode} />}
+      {Mode.mode === "confirm" && (
+        <Thanks HandleModeChange={SetMode} setCookies={setCookies} s/>
+      )}
     </NormalText>
   )
 }

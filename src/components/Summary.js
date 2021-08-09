@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { useForm } from "react-hook-form"
 import { useCookies } from "react-cookie"
-import { Button } from "../utils/typography"
+import { Button, H4 } from "../utils/typography"
 import BottomFloater from "./BottomFloater"
 import Modal from "./Modal"
 import TrashIcon from "../icons/TrashIcon"
@@ -59,7 +59,9 @@ export default function Summary({
         footer={<></>}
         content={
           <Container>
-            <h5 className="title is-5">ประเภทข้อมูล</h5>
+            <H4 fontWeight={600} className="title is-5">
+              ประเภทข้อมูล
+            </H4>
             <FlexBox className="category">
               {distinctCategory.map((cat) => (
                 <div key={`dc-${cat}`} className="card">
@@ -68,7 +70,9 @@ export default function Summary({
               ))}
             </FlexBox>
             <br />
-            <h5 className="title is-5">รายการข้อมูลที่เลือก</h5>
+            <H4 fontWeight={600} className="title is-5">
+              รายการข้อมูลที่เลือก
+            </H4>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <UL>
