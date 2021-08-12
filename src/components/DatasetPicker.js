@@ -130,7 +130,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
         {SelCat !== "" && (
           <>
             <nav
-              className="breadcrumb has-arrow-separator"
+              className="breadcrumb"
               aria-label="breadcrumbs"
             >
               <ul>
@@ -147,7 +147,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
         {SelCat === "" &&
           Category.map((currCat, ind) => {
             return (
-              <div
+              <HoverableBox
                 key={`tile-${ind}`}
                 className={`box ${SelCat === currCat ? "is-selected" : ""}`}
                 onClick={() => {
@@ -157,7 +157,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
                 {/* <p className="title">{currCat}</p> */}
                 {/* <p className="subtitle">{currCat}</p> */}
                 <div className="content">{currCat}</div>
-              </div>
+              </HoverableBox>
             )
           })}
       </FlexBox>
@@ -334,6 +334,13 @@ function OneCategoryList({ SelCat, FilteredData, ToggleItem, Selected }) {
 
 const Blocker = styled.div`
   height: ${(props) => props.height || "7rem"};
+`
+
+const HoverableBox = styled.div`
+  :hover {
+    background-color: #CAE636;
+    transition: background-color 300ms linear;
+  }
 `
 
 export const FlexBox = styled.div`

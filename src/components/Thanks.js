@@ -1,10 +1,11 @@
 import React from "react"
 import styled from "styled-components"
-import { Label } from "../utils/typography"
+import { Button, Label } from "../utils/typography"
 import { Container } from "./First"
 import LogoDataGo from "../logo/data-go-th.png"
 import LogoDGA from "../logo/dga.png"
 import LogoDigi from "../logo/digi.png"
+import "./First.css"
 
 export default function Thanks({ HandleModeChange, setCookies }) {
   return (
@@ -30,8 +31,9 @@ export default function Thanks({ HandleModeChange, setCookies }) {
       </div>
       <div className="columns">
         <div className="column is-narrow has-text-centered">
-          <button
-            className="button is-small is-warning is-light"
+          <Button
+            fontWeight={600}
+            className="button is-warning is-blank"
             onClick={() => {
               setCookies("mode", "")
               setCookies("email", "")
@@ -40,7 +42,7 @@ export default function Thanks({ HandleModeChange, setCookies }) {
             }}
           >
             เริ่มต้นใหม่
-          </button>
+          </Button>
         </div>
         <div className="column">
           <LogoContainer>

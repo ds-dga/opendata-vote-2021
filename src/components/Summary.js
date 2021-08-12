@@ -6,7 +6,7 @@ import { Button, H4 } from "../utils/typography"
 import BottomFloater from "./BottomFloater"
 import Modal from "./Modal"
 import TrashIcon from "../icons/TrashIcon"
-import { FlexBox } from "./DatasetPicker"
+import "./First.css"
 
 export default function Summary({
   Mode,
@@ -108,44 +108,49 @@ export default function Summary({
               </div>
 
               <hr />
-              <button
-                className="button is-warning"
-                type="button"
-                onClick={() => {
-                  setCookie("mode", "")
-                  setCookie("email", "")
-                  setCookie("phone", "")
-                  HandleModeChange({ mode: "", email: "", phone: "" })
-                }}
-              >
-                เริ่มต้นใหม่
-              </button>
-              <button
-                className="button"
-                type="button"
-                onClick={() => {
-                  SetModalVisible(false)
-                  return
-                }}
-              >
-                Back
-              </button>
-              {total > 0 && (
-                <button
-                  className="button is-success"
-                  type="submit"
-                  onClick={() => {
-                    if (
-                      !window.confirm(
-                        "หลังจากยืนยันแล้ว หากต้องการเปลี่ยนแปลงจะต้องเริ่มต้นใหม่เท่านั้น \n\nยืนยันที่จะส่งความเห็นของท่าน?"
+              <FlexBox>
+                {total > 0 && (
+                  <Button
+                    fontWeight={600}
+                    className="button is-mushy-blue"
+                    type="submit"
+                    onClick={() => {
+                      if (
+                        !window.confirm(
+                          "หลังจากยืนยันแล้ว หากต้องการเปลี่ยนแปลงจะต้องเริ่มต้นใหม่เท่านั้น \n\nยืนยันที่จะส่งความเห็นของท่าน?"
+                        )
                       )
-                    )
-                      return
+                        return
+                    }}
+                  >
+                    ส่งความเห็น
+                  </Button>
+                )}
+                <Button
+                  fontWeight={600}
+                  className="button is-light-gray"
+                  type="button"
+                  onClick={() => {
+                    SetModalVisible(false)
+                    return
                   }}
                 >
-                  ส่งความเห็น
-                </button>
-              )}
+                  Back
+                </Button>
+                <Button
+                  fontWeight={600}
+                  className="button is-warning is-blank"
+                  type="button"
+                  onClick={() => {
+                    setCookie("mode", "")
+                    setCookie("email", "")
+                    setCookie("phone", "")
+                    HandleModeChange({ mode: "", email: "", phone: "" })
+                  }}
+                >
+                  เริ่มต้นใหม่
+                </Button>
+              </FlexBox>
             </form>
           </Container>
         }
@@ -161,7 +166,7 @@ export default function Summary({
               </Number>
               <Small>
                 <Button
-                  className={"button is-small is-outlined is-link"}
+                  className={"button"}
                   onClick={() => {
                     SetModalVisible(true)
                   }}
@@ -200,13 +205,27 @@ const UL = styled.ul`
     align-items: flex-start;
 
     div.d {
-      margin-left: 0.5rem;
+      flex: 1;
+      margin-left: 0.9rem;
+      div:first-child {
+        margin-top: 0.5rem;
+      }
+      div {
+        margin-bottom: 0.7rem;
+      }
     }
 
     span {
       margin-left: 0.5rem;
     }
   }
+`
+
+const FlexBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 `
 
 const Container = styled.div`

@@ -18,3 +18,29 @@
   border-color: transparent;
   color: #000;
 }
+.button.is-mushy-blue {
+  background-color: #63ADE1;
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(204, 204, 204, 0.767), 0 2px 5px 0 rgba(204, 204, 204, 0.767);
+}
+.button.is-mushy-blue:hover {
+  background-color: #63ADE1e1;
+  border-color: transparent;
+  color: #fff;
+}
+.button.is-light-gray {
+  background-color: #B0BCCA;
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(204, 204, 204, 0.767), 0 2px 5px 0 rgba(204, 204, 204, 0.767);
+}
+.button.is-light-gray:hover {
+  background-color: #B0BCCAe1;
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-blank{
+  box-shadow: 0 2px 5px 0 rgba(204, 204, 204, 0.767), 0 2px 5px 0 rgba(204, 204, 204, 0.767);
+}

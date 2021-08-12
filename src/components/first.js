@@ -29,10 +29,10 @@ export default function First({ HandleModeChange }) {
       <Intro />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="columns">
-          <div className="column is-narrow">
+          <div className="column is-1">
             <Label fontWeight={600}>เข้าร่วมกิจกรรม</Label>
           </div>
-          <div className="column is-narrow">
+          <div className="column">
             <div className="field">
               <p className="control has-icons-left has-icons-right">
                 <input
@@ -89,22 +89,24 @@ export default function First({ HandleModeChange }) {
               )}
             </div>
           </div>
-          {/* <div className="column"></div> */}
+        </div>
+        {/* <div className="column"></div> */}
+        <div className="columns">
           <div className="column">
             <ButtonContainer className="buttons are-medium is-centered">
               <Button
-                className="button is-lime-green"
-                fontWeight={500}
+                className="button is-mushy-blue"
+                fontWeight={600}
                 type="submit"
                 disabled={Object.keys(errors).length > 0}
               >
                 ลงทะเบียน
                 <br />
-                เข้าร่วมกิจกรรม
+                รับของรางวัล
               </Button>
               <Button
-                className="button is-light-blue"
-                fontWeight={500}
+                className="button is-light-gray"
+                fontWeight={600}
                 onClick={async () => {
                   // if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
                   //   return
@@ -117,7 +119,7 @@ export default function First({ HandleModeChange }) {
               >
                 โหวตเลย
                 <br />
-                โดยไม่ลงทะเบียนรับรางวัล
+                โดยไม่รับของรางวัล
               </Button>
             </ButtonContainer>
           </div>
@@ -149,7 +151,7 @@ function Intro() {
         </div>
       </div>
       <div className="columns">
-        <Label className="column is-narrow" fontWeight={600}>
+        <Label className="column is-1" fontWeight={600}>
           ที่มา
         </Label>
         <div className="column is-three-quarters">
@@ -168,7 +170,7 @@ function Intro() {
         </div>
       </div>
       <div className="columns">
-        <Label className="column is-narrow" fontWeight={600}>
+        <Label className="column is-1" fontWeight={600}>
           กติกา
         </Label>
         <div className="column is-three-quarters">
