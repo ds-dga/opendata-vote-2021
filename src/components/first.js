@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useCookies } from "react-cookie"
 import EmailIcon from "../icons/EmailIcon"
 import TelephoneIcon from "../icons/TelephoneIcon"
+import FacebookIcon from "../icons/FacebookIcon"
 import { Button, Label } from "../utils/typography"
 import { LogoContainer } from "./Thanks"
 import LogoDataGo from "../logo/data-go-th.png"
@@ -12,16 +13,28 @@ import LogoDigi from "../logo/digi.png"
 import "./First.css"
 
 export default function First({ HandleModeChange }) {
-  const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
+  const [cookies, setCookie] = useCookies([
+    "mode",
+    "email",
+    "phone",
+    "facebook",
+  ])
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: "onChange" })
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      email: cookies.email || "",
+    },
+  })
+
   const onSubmit = (data) => {
     setCookie("mode", "lottery")
     setCookie("email", data.email)
     setCookie("phone", data.phone)
+    setCookie("facebook", data.facebook)
     HandleModeChange({ mode: "lottery", ...data })
   }
   return (
@@ -88,6 +101,21 @@ export default function First({ HandleModeChange }) {
                 </p>
               )}
             </div>
+            <div className="field">
+              <p className="control has-icons-left">
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="ชื่อใน Facebook"
+                  {...register("facebook", {
+                    required: false,
+                  })}
+                />
+                <span className="icon is-small is-left">
+                  <FacebookIcon />
+                </span>
+              </p>
+            </div>
           </div>
         </div>
         {/* <div className="column"></div> */}
@@ -111,7 +139,7 @@ export default function First({ HandleModeChange }) {
                   // if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
                   //   return
 
-                  setCookie("mode", "anonymous")
+                  setCookie("mode", `anonymous`)
                   setCookie("email", "")
                   setCookie("phone", "")
                   HandleModeChange({ mode: "anonymous" })
@@ -197,7 +225,7 @@ function Intro() {
           รางวัล
         </Label>
         <div className="column is-three-quarters">
-          <p>xxxxx 1 ท่านต่อ 1 สิทธิ์</p>
+          <p>Voucher แทนเงินสด Big C : 200 บาท 25 รางวัล 1 ท่านต่อ 1 สิทธิ์</p>
         </div>
       </div>
     </>

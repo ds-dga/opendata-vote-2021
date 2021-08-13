@@ -94,6 +94,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
         Mode={Mode}
         HandleModeChange={HandleModeChange}
         ErrMsg={ErrMsg}
+        SetErrMsg={SetErrMsg}
       />
 
       <div className="field">
@@ -129,16 +130,21 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
         {Category.length === 0 && <p>ไม่พบข้อมูล</p>}
         {SelCat !== "" && (
           <>
-            <nav
-              className="breadcrumb"
-              aria-label="breadcrumbs"
-            >
+            <nav className="breadcrumb" aria-label="breadcrumbs">
               <ul>
                 <li>
-                  <a onClick={() => SetCat("")}>ย้อนกลับ</a>
+                  <button className="button is-text" onClick={() => SetCat("")}>
+                    ย้อนกลับ
+                  </button>
                 </li>
                 <li className="is-active">
-                  <a aria-current="page">{SelCat}</a>
+                  <button
+                    className="button is-text"
+                    disabled
+                    aria-current="page"
+                  >
+                    {SelCat}
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -338,7 +344,7 @@ const Blocker = styled.div`
 
 const HoverableBox = styled.div`
   :hover {
-    background-color: #CAE636;
+    background-color: #cae636;
     transition: background-color 300ms linear;
   }
 `

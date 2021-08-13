@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { useForm } from "react-hook-form"
 import { useCookies } from "react-cookie"
+import { gql, useMutation } from "@apollo/client"
 import { Button, H4 } from "../utils/typography"
 import BottomFloater from "./BottomFloater"
 import Modal from "./Modal"
@@ -14,9 +15,11 @@ export default function Summary({
   Selected,
   ToggleItem,
   ErrMsg,
+  SetErrMsg,
 }) {
   const [ModalVisible, SetModalVisible] = useState(false)
-  const { register, handleSubmit, formState } = useForm({ mode: "onChange" })
+  const [sendResult] = useMutation(UPSERT_RESULT)
+  const { register, handleSubmit } = useForm({ mode: "onChange" })
   const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
   const total = Object.keys(Selected).length
   const maximum = 20
@@ -24,7 +27,7 @@ export default function Summary({
   const categories = Object.keys(Selected).map((k) => Selected[k].category)
   const distinctCategory = Array.from(new Set(categories))
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     let result = []
     Object.keys(Selected).map((k) => {
       const t = data[`comment-${k}`]
@@ -37,18 +40,28 @@ export default function Summary({
     })
     let body = {
       result,
-      email: "anonymous",
+      email: `anonymous-${+new Date()}`,
       phone: "-",
-      timestamp: +new Date() / 1000,
+      timestamp: new Date().toISOString(),
     }
+    console.log(body)
     if (cookies.mode === "lottery") {
       body["email"] = cookies.email
       body["phone"] = cookies.phone
+      body["facebook"] = cookies.facebook
     }
     console.log("onSubmit result: ", body)
-    setCookie("mode", "confirm")
     // TODO: add mutation here
-    HandleModeChange({ ...Mode, mode: "confirm" })
+
+    try {
+      const resp = await sendResult({ variables: body })
+      if (resp.data) {
+        setCookie("mode", "confirm")
+        HandleModeChange({ ...Mode, mode: "confirm" })
+      }
+    } catch (e) {
+      SetErrMsg(e)
+    }
   }
 
   return (
@@ -145,12 +158,22 @@ export default function Summary({
                     setCookie("mode", "")
                     setCookie("email", "")
                     setCookie("phone", "")
-                    HandleModeChange({ mode: "", email: "", phone: "" })
+                    setCookie("facebook", "")
+                    HandleModeChange({
+                      mode: "",
+                      email: "",
+                      phone: "",
+                      facebook: "",
+                    })
                   }}
                 >
                   เริ่มต้นใหม่
                 </Button>
               </FlexBox>
+
+              {ErrMsg.length > 0 && (
+                <div className="bottom-float-error-message">{ErrMsg}</div>
+              )}
             </form>
           </Container>
         }
@@ -240,5 +263,31 @@ const Container = styled.div`
     padding: 3px 10px;
     text-align: center;
     min-height: 2rem;
+  }
+`
+const UPSERT_RESULT = gql`
+  mutation UPSERT_RESULT(
+    $email: String!
+    $phone: String!
+    $facebook: String
+    $result: json!
+    $timestamp: timestamptz!
+  ) {
+    insert_opendata_popular_vote_one(
+      object: {
+        email: $email
+        phone: $phone
+        facebook: $facebook
+        result: $result
+        timestamp: $timestamp
+      }
+      on_conflict: {
+        constraint: popular_vote_email_key
+        update_columns: [phone, facebook, result, timestamp]
+      }
+    ) {
+      id
+      created_at
+    }
   }
 `

@@ -29,6 +29,11 @@
   border-color: transparent;
   color: #fff;
 }
+.button.is-mushy-blue:disabled {
+  background-color: #63ADE133;
+  border-color: transparent;
+  color: #444;
+}
 .button.is-light-gray {
   background-color: #B0BCCA;
   border-color: transparent;
