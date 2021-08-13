@@ -1,24 +1,19 @@
 import React from "react"
 import styled from "styled-components"
-import { Button, Label } from "../utils/typography"
+import { Button } from "../utils/typography"
 import { Container } from "./First"
-import LogoDataGo from "../logo/data-go-th.png"
-import LogoDGA from "../logo/dga.png"
-import LogoDigi from "../logo/digi.png"
+import ThanksJpeg from "../logo/thanks.jpg"
 import "./First.css"
 
 export default function Thanks({ HandleModeChange, setCookies }) {
   return (
     <Container className="container">
       <div className="columns">
-        <Label className="column">
-          <h2 className="title is-3">กิจกรรมสำรวจชุดข้อมูล Open data</h2>
-        </Label>
-        <div className="column"></div>
-      </div>
-
-      <div className="columns">
         <div className="column">
+          <figure className="image">
+            <img src={ThanksJpeg} alt="Thank you" />
+          </figure>
+          <br />
           <p>
             ทีมงานขอขอบคุณการมีส่วนร่วมของท่านเป็นอย่างยิ่ง
             ความเห็นของท่านในครั้งนี้จะนำไปผลักดันการพัฒนาข้อมูลเปิดภาครัฐต่อไป
@@ -38,24 +33,12 @@ export default function Thanks({ HandleModeChange, setCookies }) {
               setCookies("mode", "")
               setCookies("email", "")
               setCookies("phone", "")
-              HandleModeChange({ mode: "", email: "", phone: "" })
+              setCookies("facebook", "")
+              HandleModeChange({ mode: "", email: "", phone: "", facebook: "" })
             }}
           >
             เริ่มต้นใหม่
           </Button>
-        </div>
-        <div className="column">
-          <LogoContainer>
-            <figure className="image is-128x128">
-              <img alt="DGA" src={LogoDGA} />
-            </figure>
-            <figure className="image is-128x128">
-              <img alt="Digi" src={LogoDigi} />
-            </figure>
-            <figure className="image is-128x128">
-              <img alt="Data.go.th" src={LogoDataGo} />
-            </figure>
-          </LogoContainer>
         </div>
       </div>
     </Container>
