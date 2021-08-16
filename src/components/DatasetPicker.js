@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import * as _ from "lodash"
+import ReactGA from "react-ga"
 import { H4, Label } from "../utils/typography"
 import AvailableDataset from "../utils/dataset.json"
 import SearchIcon from "../icons/SearchIcon"
@@ -39,6 +40,13 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
 
   const addSelection = (item) => {
     if (reachMaxSelection()) return
+
+    ReactGA.event({
+      category: "decision",
+      action: "pick-item",
+      value: item,
+    })
+
     let a = {}
     a[item.no] = item
     SetSelection({
@@ -47,6 +55,12 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
     })
   }
   const removeSelection = (item) => {
+    ReactGA.event({
+      category: "decision",
+      action: "unpick-item",
+      value: item,
+    })
+
     SetErrMsg("")
     let a = { ...Selected }
     delete a[item.no]
@@ -79,6 +93,10 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
     )
     SetFilteredData(_.sortBy(catData, ["category", "frequency"]))
   }, [Q])
+
+  useEffect(() => {
+    ReactGA.pageview("/datapicker")
+  }, [])
 
   return (
     <Container className="container">
@@ -133,7 +151,17 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
             <nav className="breadcrumb" aria-label="breadcrumbs">
               <ul>
                 <li>
-                  <button className="button is-text" onClick={() => SetCat("")}>
+                  <button
+                    className="button is-text"
+                    onClick={() => {
+                      ReactGA.event({
+                        category: "decision",
+                        action: "reset-category",
+                        value: "",
+                      })
+                      SetCat("")
+                    }}
+                  >
                     ย้อนกลับ
                   </button>
                 </li>
@@ -157,6 +185,11 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
                 key={`tile-${ind}`}
                 className={`box ${SelCat === currCat ? "is-selected" : ""}`}
                 onClick={() => {
+                  ReactGA.event({
+                    category: "decision",
+                    action: "pick-category",
+                    value: currCat,
+                  })
                   SetCat(SelCat === currCat ? "" : currCat)
                 }}
               >

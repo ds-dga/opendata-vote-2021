@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { useCookies } from "react-cookie"
+import ReactGA from "react-ga"
 import EmailIcon from "../icons/EmailIcon"
 import TelephoneIcon from "../icons/TelephoneIcon"
 import FacebookIcon from "../icons/FacebookIcon"
@@ -31,12 +32,22 @@ export default function First({ HandleModeChange }) {
   })
 
   const onSubmit = (data) => {
+    ReactGA.event({
+      category: "interaction",
+      action: "register",
+      value: "lottery",
+    })
     setCookie("mode", "lottery")
     setCookie("email", data.email)
     setCookie("phone", data.phone)
     setCookie("facebook", data.facebook)
     HandleModeChange({ mode: "lottery", ...data })
   }
+
+  useEffect(() => {
+    ReactGA.pageview("/")
+  }, [])
+
   return (
     <Container className="container">
       <Intro />
@@ -138,7 +149,11 @@ export default function First({ HandleModeChange }) {
                 onClick={async () => {
                   // if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
                   //   return
-
+                  ReactGA.event({
+                    category: "interaction",
+                    action: "register",
+                    value: "anonymous",
+                  })
                   setCookie("mode", `anonymous`)
                   setCookie("email", "")
                   setCookie("phone", "")

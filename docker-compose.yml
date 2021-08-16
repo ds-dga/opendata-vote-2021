@@ -7,6 +7,9 @@ services:
       - 80
     networks:
       - proxy_default
+    environment:
+      - REACT_APP_GA_TRACKING_ID=G-TXX6D46J3V
+      - NODE_ENV=production
 
 networks:
   proxy_default:

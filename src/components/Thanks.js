@@ -1,11 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
+import ReactGA, { OutboundLink } from "react-ga"
 import { Button } from "../utils/typography"
 import { Container } from "./First"
 import ThanksJpeg from "../logo/thanks.jpg"
 import "./First.css"
 
 export default function Thanks({ HandleModeChange, setCookies }) {
+  useEffect(() => {
+    ReactGA.pageview("/thanks")
+  }, [])
   return (
     <Container className="container">
       <div className="columns">
@@ -20,7 +24,9 @@ export default function Thanks({ HandleModeChange, setCookies }) {
           </p>
           <p>
             ท่านสามารถเข้าเยี่ยมชม และใช้งานศูนย์กลางข้อมูลเปิดภาครัฐได้ที่{" "}
-            <a href="https://data.go.th">data.go.th</a>
+            <OutboundLink eventLabel="data.go.th" to="https://data.go.th">
+              data.go.th
+            </OutboundLink>
           </p>
         </div>
       </div>
@@ -30,6 +36,11 @@ export default function Thanks({ HandleModeChange, setCookies }) {
             fontWeight={600}
             className="button is-warning is-blank"
             onClick={() => {
+              ReactGA.event({
+                category: "interaction",
+                action: "reset",
+                value: "start over",
+              })
               setCookies("mode", "")
               setCookies("email", "")
               setCookies("phone", "")

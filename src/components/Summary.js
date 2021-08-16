@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { useForm } from "react-hook-form"
 import { useCookies } from "react-cookie"
+import ReactGA from "react-ga"
 import { gql, useMutation } from "@apollo/client"
 import { Button, H4 } from "../utils/typography"
 import BottomFloater from "./BottomFloater"
@@ -50,8 +51,11 @@ export default function Summary({
       body["phone"] = cookies.phone
       body["facebook"] = cookies.facebook
     }
-    console.log("onSubmit result: ", body)
-    // TODO: add mutation here
+    ReactGA.event({
+      category: "interaction",
+      action: "submit",
+      value: body.phone === "-" ? "anonymous" : "lottery",
+    })
 
     try {
       const resp = await sendResult({ variables: body })
@@ -155,6 +159,11 @@ export default function Summary({
                   className="button is-warning is-blank"
                   type="button"
                   onClick={() => {
+                    ReactGA.event({
+                      category: "interaction",
+                      action: "reset",
+                      value: "reset from summary",
+                    })
                     setCookie("mode", "")
                     setCookie("email", "")
                     setCookie("phone", "")
@@ -191,6 +200,7 @@ export default function Summary({
                 <Button
                   className={"button"}
                   onClick={() => {
+                    ReactGA.pageview("/summary")
                     SetModalVisible(true)
                   }}
                 >
