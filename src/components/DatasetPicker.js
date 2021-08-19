@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import * as _ from "lodash"
-import ReactGA from "react-ga"
+import ReactGA from "react-ga4"
 import { H4, Label } from "../utils/typography"
 import AvailableDataset from "../utils/dataset.json"
 import SearchIcon from "../icons/SearchIcon"
@@ -44,7 +44,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
     ReactGA.event({
       category: "decision",
       action: "pick-item",
-      value: item,
+      label: item,
     })
 
     let a = {}
@@ -58,7 +58,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
     ReactGA.event({
       category: "decision",
       action: "unpick-item",
-      value: item,
+      label: item,
     })
 
     SetErrMsg("")
@@ -157,7 +157,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
                       ReactGA.event({
                         category: "decision",
                         action: "reset-category",
-                        value: "",
+                        label: "",
                       })
                       SetCat("")
                     }}
@@ -188,7 +188,7 @@ export default function DatasetPicker({ HandleModeChange, Mode }) {
                   ReactGA.event({
                     category: "decision",
                     action: "pick-category",
-                    value: currCat,
+                    label: currCat,
                   })
                   SetCat(SelCat === currCat ? "" : currCat)
                 }}

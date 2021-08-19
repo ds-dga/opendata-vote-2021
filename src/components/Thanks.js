@@ -1,12 +1,12 @@
 import React, { useEffect } from "react"
 import styled from "styled-components"
-import ReactGA, { OutboundLink } from "react-ga"
+import ReactGA, { OutboundLink } from "react-ga4"
 import { Button } from "../utils/typography"
 import { Container } from "./First"
 import ThanksJpeg from "../logo/thanks.jpg"
 import "./First.css"
 
-export default function Thanks({ HandleModeChange, setCookies }) {
+export default function Thanks({ HandleModeChange, setCookie }) {
   useEffect(() => {
     ReactGA.pageview("/thanks")
   }, [])
@@ -39,12 +39,12 @@ export default function Thanks({ HandleModeChange, setCookies }) {
               ReactGA.event({
                 category: "interaction",
                 action: "reset",
-                value: "start over",
+                label: "start over",
               })
-              setCookies("mode", "")
-              setCookies("email", "")
-              setCookies("phone", "")
-              setCookies("facebook", "")
+              setCookie("mode", "", { sameSite: "Strict" })
+              setCookie("email", "", { sameSite: "Strict" })
+              setCookie("phone", "", { sameSite: "Strict" })
+              setCookie("facebook", "", { sameSite: "Strict" })
               HandleModeChange({ mode: "", email: "", phone: "", facebook: "" })
             }}
           >

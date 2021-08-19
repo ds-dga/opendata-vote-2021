@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import { useCookies } from "react-cookie"
-import ReactGA from "react-ga"
+import ReactGA from "react-ga4"
 import EmailIcon from "../icons/EmailIcon"
 import TelephoneIcon from "../icons/TelephoneIcon"
 import FacebookIcon from "../icons/FacebookIcon"
@@ -35,12 +35,12 @@ export default function First({ HandleModeChange }) {
     ReactGA.event({
       category: "interaction",
       action: "register",
-      value: "lottery",
+      label: "lottery",
     })
-    setCookie("mode", "lottery")
-    setCookie("email", data.email)
-    setCookie("phone", data.phone)
-    setCookie("facebook", data.facebook)
+    setCookie("mode", "lottery", { sameSite: "Strict" })
+    setCookie("email", data.email, { sameSite: "Strict" })
+    setCookie("phone", data.phone, { sameSite: "Strict" })
+    setCookie("facebook", data.facebook, { sameSite: "Strict" })
     HandleModeChange({ mode: "lottery", ...data })
   }
 
@@ -152,11 +152,11 @@ export default function First({ HandleModeChange }) {
                   ReactGA.event({
                     category: "interaction",
                     action: "register",
-                    value: "anonymous",
+                    label: "anonymous",
                   })
-                  setCookie("mode", `anonymous`)
-                  setCookie("email", "")
-                  setCookie("phone", "")
+                  setCookie("mode", `anonymous`, { sameSite: "Strict" })
+                  setCookie("email", "", { sameSite: "Strict" })
+                  setCookie("phone", "", { sameSite: "Strict" })
                   HandleModeChange({ mode: "anonymous" })
                 }}
               >

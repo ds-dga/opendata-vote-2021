@@ -9,7 +9,7 @@ import { ApolloProvider } from "@apollo/client"
 
 export default function App() {
   const apolloClient = useApollo()
-  const [cookies, setCookies] = useCookies(["mode", "email", "phone"])
+  const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
   const [Mode, SetMode] = useState({
     mode: cookies.mode || "",
     email: cookies.email || "",
@@ -29,7 +29,7 @@ export default function App() {
           <DatasetPicker Mode={Mode} HandleModeChange={SetMode} />
         )}
         {Mode.mode === "confirm" && (
-          <Thanks HandleModeChange={SetMode} setCookies={setCookies} s />
+          <Thanks HandleModeChange={SetMode} setCookie={setCookie} />
         )}
       </NormalText>
     </ApolloProvider>

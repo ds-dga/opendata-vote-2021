@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { useForm } from "react-hook-form"
 import { useCookies } from "react-cookie"
-import ReactGA from "react-ga"
+import ReactGA from "react-ga4"
 import { gql, useMutation } from "@apollo/client"
 import { Button, H4 } from "../utils/typography"
 import BottomFloater from "./BottomFloater"
@@ -54,13 +54,13 @@ export default function Summary({
     ReactGA.event({
       category: "interaction",
       action: "submit",
-      value: body.phone === "-" ? "anonymous" : "lottery",
+      label: body.phone === "-" ? "anonymous" : "lottery",
     })
 
     try {
       const resp = await sendResult({ variables: body })
       if (resp.data) {
-        setCookie("mode", "confirm")
+        setCookie("mode", "confirm", { sameSite: "Strict" })
         HandleModeChange({ ...Mode, mode: "confirm" })
       }
     } catch (e) {
@@ -162,12 +162,12 @@ export default function Summary({
                     ReactGA.event({
                       category: "interaction",
                       action: "reset",
-                      value: "reset from summary",
+                      label: "reset from summary",
                     })
-                    setCookie("mode", "")
-                    setCookie("email", "")
-                    setCookie("phone", "")
-                    setCookie("facebook", "")
+                    setCookie("mode", "", { sameSite: "Strict" })
+                    setCookie("email", "", { sameSite: "Strict" })
+                    setCookie("phone", "", { sameSite: "Strict" })
+                    setCookie("facebook", "", { sameSite: "Strict" })
                     HandleModeChange({
                       mode: "",
                       email: "",

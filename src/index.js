@@ -1,14 +1,12 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import ReactGA from "react-ga"
+import ReactGA from "react-ga4"
 import { CookiesProvider } from "react-cookie"
 import App from "./App"
 // import reportWebVitals from "./reportWebVitals";
 import "../node_modules/bulma/css/bulma.css"
 
-ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID, {
-  debug: process.env.NODE_ENV !== "production",
-})
+ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID)
 
 ReactDOM.render(
   <React.StrictMode>
