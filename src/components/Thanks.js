@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import styled from "styled-components"
-import ReactGA, { OutboundLink } from "react-ga4"
+import ReactGA from "react-ga4"
 import { Button } from "../utils/typography"
 import { Container } from "./First"
 import ThanksJpeg from "../logo/thanks.jpg"
@@ -15,7 +15,7 @@ export default function Thanks({ HandleModeChange, setCookie }) {
       <div className="columns">
         <div className="column">
           <figure className="image">
-            <img src={ThanksJpeg} alt="Thank you" />
+            <img src={ThanksJpeg} alt="Thank you" title="Thank you" />
           </figure>
           <br />
           <p>
@@ -24,9 +24,7 @@ export default function Thanks({ HandleModeChange, setCookie }) {
           </p>
           <p>
             ท่านสามารถเข้าเยี่ยมชม และใช้งานศูนย์กลางข้อมูลเปิดภาครัฐได้ที่{" "}
-            <OutboundLink eventLabel="data.go.th" to="https://data.go.th">
-              data.go.th
-            </OutboundLink>
+            <a href="https://data.go.th">data.go.th</a>
           </p>
         </div>
       </div>

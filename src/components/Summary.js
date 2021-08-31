@@ -283,7 +283,7 @@ const UPSERT_RESULT = gql`
     $result: json!
     $timestamp: timestamptz!
   ) {
-    insert_opendata_popular_vote_one(
+    insert_popular_dataset_one(
       object: {
         email: $email
         phone: $phone
@@ -292,7 +292,7 @@ const UPSERT_RESULT = gql`
         timestamp: $timestamp
       }
       on_conflict: {
-        constraint: popular_vote_email_key
+        constraint: popular_dataset_email_key
         update_columns: [phone, facebook, result, timestamp]
       }
     ) {

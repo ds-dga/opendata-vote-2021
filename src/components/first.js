@@ -31,6 +31,9 @@ export default function First({ HandleModeChange }) {
     },
   })
 
+  const expiredAt = new Date("2021-08-27T23:59+07:00")
+  const now = new Date()
+
   const onSubmit = (data) => {
     ReactGA.event({
       category: "interaction",
@@ -51,122 +54,133 @@ export default function First({ HandleModeChange }) {
   return (
     <Container className="container">
       <Intro />
+      {now > expiredAt && (
+        <div className="columns">
+          <div className="column">
+            สิ้นสุดกิจกรรมแล้ว ขอบคุณทุกท่านที่เข้าร่วม
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="columns">
-          <div className="column is-1">
-            <Label fontWeight={600}>เข้าร่วมกิจกรรม</Label>
+        {now < expiredAt && (
+          <div className="columns">
+            <div className="column is-1">
+              <Label fontWeight={600}>เข้าร่วมกิจกรรม</Label>
+            </div>
+            <div className="column">
+              <div className="field">
+                <p className="control has-icons-left has-icons-right">
+                  <input
+                    className="input"
+                    type="email"
+                    placeholder="Email"
+                    {...register("email", {
+                      required: true,
+                      pattern: /^([\w_.+]+)@(.*?)\.(.*?)[.\w]+$/i,
+                    })}
+                  />
+                  <span className="icon is-small is-left">
+                    <EmailIcon />
+                  </span>
+                  <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
+                  </span>
+                </p>
+                {errors.email?.type === "required" && (
+                  <p className="has-text-danger is-size-7">
+                    Email เป็นฟิลด์จำเป็น
+                  </p>
+                )}
+                {errors.email?.type === "pattern" && (
+                  <p className="has-text-danger is-size-7">
+                    Email format is not correct.
+                  </p>
+                )}
+              </div>
+              <div className="field">
+                <p className="control has-icons-left">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="เบอร์โทรศัพท์มือถือ"
+                    {...register("phone", {
+                      required: true,
+                      pattern: /^0\d\d\d\d\d\d\d\d\d?$/i,
+                    })}
+                  />
+                  <span className="icon is-small is-left">
+                    <TelephoneIcon />
+                  </span>
+                </p>
+                {errors.phone?.type === "required" && (
+                  <p className="has-text-danger is-size-7">
+                    โทรศัพท์เป็นฟิลด์จำเป็น
+                  </p>
+                )}
+                {errors.phone?.type === "pattern" && (
+                  <p className="has-text-danger is-size-7">
+                    ตัวอย่าง 081 123 4567
+                  </p>
+                )}
+              </div>
+              <div className="field">
+                <p className="control has-icons-left">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="ชื่อใน Facebook"
+                    {...register("facebook", {
+                      required: false,
+                    })}
+                  />
+                  <span className="icon is-small is-left">
+                    <FacebookIcon />
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="column">
-            <div className="field">
-              <p className="control has-icons-left has-icons-right">
-                <input
-                  className="input"
-                  type="email"
-                  placeholder="Email"
-                  {...register("email", {
-                    required: true,
-                    pattern: /^([\w_.+]+)@(.*?)\.(.*?)[.\w]+$/i,
-                  })}
-                />
-                <span className="icon is-small is-left">
-                  <EmailIcon />
-                </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-check"></i>
-                </span>
-              </p>
-              {errors.email?.type === "required" && (
-                <p className="has-text-danger is-size-7">
-                  Email เป็นฟิลด์จำเป็น
-                </p>
-              )}
-              {errors.email?.type === "pattern" && (
-                <p className="has-text-danger is-size-7">
-                  Email format is not correct.
-                </p>
-              )}
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="text"
-                  placeholder="เบอร์โทรศัพท์มือถือ"
-                  {...register("phone", {
-                    required: true,
-                    pattern: /^0\d\d\d\d\d\d\d\d\d?$/i,
-                  })}
-                />
-                <span className="icon is-small is-left">
-                  <TelephoneIcon />
-                </span>
-              </p>
-              {errors.phone?.type === "required" && (
-                <p className="has-text-danger is-size-7">
-                  โทรศัพท์เป็นฟิลด์จำเป็น
-                </p>
-              )}
-              {errors.phone?.type === "pattern" && (
-                <p className="has-text-danger is-size-7">
-                  ตัวอย่าง 081 123 4567
-                </p>
-              )}
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="text"
-                  placeholder="ชื่อใน Facebook"
-                  {...register("facebook", {
-                    required: false,
-                  })}
-                />
-                <span className="icon is-small is-left">
-                  <FacebookIcon />
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
+        )}
         {/* <div className="column"></div> */}
-        <div className="columns">
-          <div className="column">
-            <ButtonContainer className="buttons are-medium is-centered">
-              <Button
-                className="button is-mushy-blue"
-                fontWeight={600}
-                type="submit"
-                disabled={Object.keys(errors).length > 0}
-              >
-                ลงทะเบียน
-                <br />
-                รับของรางวัล
-              </Button>
-              <Button
-                className="button is-light-gray"
-                fontWeight={600}
-                onClick={async () => {
-                  // if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
-                  //   return
-                  ReactGA.event({
-                    category: "interaction",
-                    action: "register",
-                    label: "anonymous",
-                  })
-                  setCookie("mode", `anonymous`, { sameSite: "Strict" })
-                  setCookie("email", "", { sameSite: "Strict" })
-                  setCookie("phone", "", { sameSite: "Strict" })
-                  HandleModeChange({ mode: "anonymous" })
-                }}
-              >
-                โหวตเลย
-                <br />
-                โดยไม่รับของรางวัล
-              </Button>
-            </ButtonContainer>
+        {now < expiredAt && (
+          <div className="columns">
+            <div className="column">
+              <ButtonContainer className="buttons are-medium is-centered">
+                <Button
+                  className="button is-mushy-blue"
+                  fontWeight={600}
+                  type="submit"
+                  disabled={Object.keys(errors).length > 0}
+                >
+                  ลงทะเบียน
+                  <br />
+                  รับของรางวัล
+                </Button>
+                <Button
+                  className="button is-light-gray"
+                  fontWeight={600}
+                  onClick={async () => {
+                    // if (!window.confirm("ท่านไม่ประสงค์จะรับรางวัลนะครับ?"))
+                    //   return
+                    ReactGA.event({
+                      category: "interaction",
+                      action: "register",
+                      label: "anonymous",
+                    })
+                    setCookie("mode", `anonymous`, { sameSite: "Strict" })
+                    setCookie("email", "", { sameSite: "Strict" })
+                    setCookie("phone", "", { sameSite: "Strict" })
+                    HandleModeChange({ mode: "anonymous" })
+                  }}
+                >
+                  โหวตเลย
+                  <br />
+                  โดยไม่รับของรางวัล
+                </Button>
+              </ButtonContainer>
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </Container>
   )
@@ -219,7 +233,7 @@ function Intro() {
         <div className="column is-three-quarters">
           <ul>
             <li>สามารถโหวตได้ท่านละไม่เกิน 20 รายการ</li>
-            <li>เริ่มสำรวจตั้งแต่วันที่ 16 สิงหาคม - 27 กันยายน 2564</li>
+            <li>เริ่มสำรวจตั้งแต่วันที่ 16 สิงหาคม - 27 สิงหาคม 2564</li>
             <li>
               สุ่มจับรางวัลจาก email และเบอร์โทรศัพท์ที่ท่านลงทะเบียนเท่านั้น
             </li>
