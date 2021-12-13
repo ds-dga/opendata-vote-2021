@@ -1,11 +1,11 @@
 import { useState } from "react"
-import First from "./components/First"
+import { useCookies } from "react-cookie"
 import { NormalText } from "./utils/typography"
 import { useApollo } from "./services/apollo"
-import { useCookies } from "react-cookie"
-import DatasetPicker from "./components/DatasetPicker"
-import Thanks from "./components/Thanks"
 import { ApolloProvider } from "@apollo/client"
+import Main from "./pages/main"
+import Navbar from "./components/Navbar"
+import "../node_modules/bulma/css/bulma.css"
 
 export default function App() {
   const apolloClient = useApollo()
@@ -24,13 +24,15 @@ export default function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <NormalText>
-        {Mode.mode === "" && <First HandleModeChange={SetMode} />}
+        <Navbar />
+        <Main />
+        {/* {Mode.mode === "" && <First HandleModeChange={SetMode} />}
         {["lottery", "anonymous"].includes(Mode.mode) && (
           <DatasetPicker Mode={Mode} HandleModeChange={SetMode} />
         )}
         {Mode.mode === "confirm" && (
           <Thanks HandleModeChange={SetMode} setCookie={setCookie} />
-        )}
+        )} */}
       </NormalText>
     </ApolloProvider>
   )

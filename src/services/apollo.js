@@ -1,13 +1,9 @@
 import { useMemo } from "react"
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-} from "@apollo/client"
-
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client"
+import { offsetLimitPagination } from "@apollo/client/utilities"
 let apolloClient
 
-const GQL_URI = "https://ds.10z.dev/v1/graphql"
+const GQL_URI = process.env.GQL_URI || "https://ds.10z.dev/v1/graphql"
 
 const httpLink = new HttpLink({ uri: GQL_URI })
 
@@ -26,13 +22,23 @@ const httpLink = new HttpLink({ uri: GQL_URI })
   return forward(operation)
 }) */
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        dataset: offsetLimitPagination(["where"]),
+      },
+    },
+  },
+})
+
 function createApolloClient() {
   return new ApolloClient({
     // ssrMode: typeof window === "undefined", // set to true for SSR
     // link: concat(authMiddleware, httpLink),
     link: httpLink,
     // link: new HttpLink({ uri: process.env.GRAPHQL_URI }),
-    cache: new InMemoryCache(),
+    cache,
   })
 }
 
