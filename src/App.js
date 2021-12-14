@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { useCookies } from "react-cookie"
+import { useCallback, useEffect, useState } from "react"
 import { NormalText } from "./utils/typography"
 import { useApollo } from "./services/apollo"
 import { ApolloProvider } from "@apollo/client"
@@ -9,23 +8,27 @@ import "../node_modules/bulma/css/bulma.css"
 
 export default function App() {
   const apolloClient = useApollo()
-  const [cookies, setCookie] = useCookies(["mode", "email", "phone"])
-  const [Mode, SetMode] = useState({
-    mode: cookies.mode || "",
-    email: cookies.email || "",
-    phone: cookies.phone || "",
-  })
-  /* mode
-    '' -> First step
-    'lottery', 'anonymous' --> Second step
-    'confirm' --> done
-  */
+  const [IP, setIP] = useState(null)
+
+  const handleGetIP = useCallback(async () => {
+    const res = await fetch("https://tool.everyday.in.th/ip?format=text")
+    if (res.status !== 200) {
+      setTimeout(handleGetIP, 1000)
+      return
+    }
+    const txt = await res.text()
+    setIP(txt)
+  }, [setIP])
+
+  useEffect(() => {
+    handleGetIP()
+  }, [handleGetIP])
 
   return (
     <ApolloProvider client={apolloClient}>
       <NormalText>
         <Navbar />
-        <Main />
+        <Main IP={IP} />
         {/* {Mode.mode === "" && <First HandleModeChange={SetMode} />}
         {["lottery", "anonymous"].includes(Mode.mode) && (
           <DatasetPicker Mode={Mode} HandleModeChange={SetMode} />

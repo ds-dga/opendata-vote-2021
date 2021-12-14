@@ -1,7 +1,7 @@
 import React from "react"
 import DatasetList from "../components/DatasetList"
 
-export default function Main() {
+export default function Main({ IP }) {
   return (
     <div className="columns">
       <div className="column is-full">
@@ -12,7 +12,7 @@ export default function Main() {
           </div>
         </section>
         <div className="content">
-          <DatasetList />
+          <DatasetList IP={IP} />
         </div>
       </div>
     </div>

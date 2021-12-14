@@ -1,15 +1,15 @@
 import { gql, useQuery } from "@apollo/client"
 import React, { useState } from "react"
 import styled from "styled-components"
-import ArrowDown from "../icons/ArrowDown"
-import ArrowUp from "../icons/ArrowUp"
+import SearchField from "./SearchField"
+import Vote from "./Vote"
 
-export default function DatasetList() {
+export default function DatasetList({ IP }) {
   const [Query, SetQuery] = useState("")
   const { data, loading, error, fetchMore } = useQuery(DATASET_QUERY, {
     variables: {
       offset: 0,
-      limit: 3,
+      limit: 7,
       where:
         Query.length === 0
           ? {}
@@ -28,7 +28,11 @@ export default function DatasetList() {
     <CardBox>
       {error && <p>Err! {error}...</p>}
       {loading && <p>Loading...</p>}
-      {data && data.items.map((ele) => <DatasetItem key={ele.id} item={ele} />)}
+      <SearchField currentQuery={Query} handleQueryChange={SetQuery} />
+      {data &&
+        data.items.map((ele) => (
+          <DatasetItem key={ele.id} item={ele} IP={IP} />
+        ))}
       {/* {!eof && ( */}
       <LoadMoreComponent
         loading={loading}
@@ -53,14 +57,14 @@ export const LoadMoreComponent = ({
       <div
         className="card"
         style={{
-          width: "90%",
+          // width: "90%",
           marginBottom: 5,
           padding: 10,
           textAlign: "center",
           backgroundColor: "#e8fcfc",
         }}
         onClick={() => {
-          fetchMore({ variables: { offset: currentTotal + 1 } })
+          fetchMore({ variables: { offset: currentTotal } })
         }}
       >
         Load more
@@ -70,15 +74,12 @@ export const LoadMoreComponent = ({
   return <></>
 }
 
-function DatasetItem({ item }) {
+function DatasetItem({ item, IP }) {
+  const initPoint = item.points_aggregate.aggregate.sum.point || 0
   return (
     <div className="card">
       <div className="card-content">
-        <VoteBox>
-          <ArrowUp fill={"green"} height={"1.25rem"} width={"1.25rem"} />
-          <div className="vote-number">5</div>
-          <ArrowDown height={"1.25rem"} width={"1.25rem"} />
-        </VoteBox>
+        <Vote initialValue={initPoint} datasetID={item.id} IP={IP} />
         <div style={{ marginLeft: "1rem" }}>
           <div className="category">{item.category.name}</div>
           {item.name}
@@ -89,20 +90,6 @@ function DatasetItem({ item }) {
   )
 }
 
-const VoteBox = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  width: 4ex;
-  align-items: center;
-
-  div.vote-number {
-    font-size: 2rem;
-    line-height: 1;
-    color: #989898;
-  }
-`
-
 const CardBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,6 +98,7 @@ const CardBox = styled.div`
 
     div.card-content {
       display: flex;
+      padding: 0.4rem;
 
       div.category {
         color: #aaaaaa;
@@ -128,8 +116,8 @@ const DATASET_QUERY = gql`
       offset: $offset
       where: $where
       order_by: [
-        { points_aggregate: { sum: { point: desc } } }
-        { created_at: desc }
+        { points_aggregate: { sum: { point: desc_nulls_last } } }
+        { id: asc }
       ]
     ) {
       id

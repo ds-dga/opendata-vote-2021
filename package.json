@@ -8,6 +8,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "bulma": "^0.9.3",
+    "dayjs": "^1.10.7",
     "graphql": "^16.1.0",
     "lodash": "^4.17.21",
     "react": "^17.0.2",

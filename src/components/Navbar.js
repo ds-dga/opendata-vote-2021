@@ -8,10 +8,10 @@ export default function Navbar() {
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
         <a className="navbar-item" href="https://data.go.th">
-          <img src={digi} height="28" />
+          <img src={digi} height="28" alt="DIGI" />
         </a>
 
-        <a
+        <span
           role="button"
           className={`navbar-burger ${isExpanded ? "is-active" : ""}`}
           aria-label="menu"
@@ -24,7 +24,7 @@ export default function Navbar() {
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
-        </a>
+        </span>
       </div>
 
       <div
@@ -32,27 +32,26 @@ export default function Navbar() {
         className={`navbar-menu  ${isExpanded ? "is-active" : ""}`}
       >
         <div className="navbar-start">
-          <a className="navbar-item">Home</a>
-          <a className="navbar-item">Documentation</a>
-          <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">More</a>
+          <span className="navbar-item">Home</span>
+          {/* <div className="navbar-item has-dropdown is-hoverable">
+            <span className="navbar-link">More</span>
             <div className="navbar-dropdown">
-              <a className="navbar-item">About</a>
-              <a className="navbar-item">Jobs</a>
-              <a className="navbar-item">Contact</a>
+              <span className="navbar-item">About</span>
+              <span className="navbar-item">Jobs</span>
+              <span className="navbar-item">Contact</span>
               <hr className="navbar-divider" />
-              <a className="navbar-item">Report an issue</a>
+              <span className="navbar-item">Report an issue</span>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              <a className="button is-primary">
+              {/* <span className="button is-primary">
                 <strong>Sign up</strong>
-              </a>
-              <a className="button is-light">Log in</a>
+              </span> */}
+              <span className="button is-light">Log in</span>
             </div>
           </div>
         </div>
