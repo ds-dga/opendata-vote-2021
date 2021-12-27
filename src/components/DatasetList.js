@@ -1,11 +1,17 @@
-import { gql, useQuery } from "@apollo/client"
-import React, { useState } from "react"
-import styled from "styled-components"
-import SearchField from "./SearchField"
-import Vote from "./Vote"
+import { gql, useQuery } from "@apollo/client";
+import React, { useState } from "react";
+import styled from "styled-components";
+import dayjs from "dayjs";
+import th from "dayjs/locale/th";
+import buddhistEra from "dayjs/plugin/buddhistEra";
+import SearchField from "./SearchField";
+import Vote from "./Vote";
+
+dayjs.extend(buddhistEra);
+dayjs.locale(th);
 
 export default function DatasetList({ IP }) {
-  const [Query, SetQuery] = useState("")
+  const [Query, SetQuery] = useState("");
   const { data, loading, error, fetchMore } = useQuery(DATASET_QUERY, {
     variables: {
       offset: 0,
@@ -20,9 +26,9 @@ export default function DatasetList({ IP }) {
               ],
             },
     },
-  })
-  const count = (data && data.total.aggregate.count) || 0
-  const currTotal = (data && data.items.length) || 0
+  });
+  const count = (data && data.total.aggregate.count) || 0;
+  const currTotal = (data && data.items.length) || 0;
   // const eof = count == 0 || (count > 0 && currTotal === count)
   return (
     <CardBox>
@@ -42,7 +48,7 @@ export default function DatasetList({ IP }) {
       />
       {/* )} */}
     </CardBox>
-  )
+  );
 }
 
 export const LoadMoreComponent = ({
@@ -51,7 +57,7 @@ export const LoadMoreComponent = ({
   count,
   currentTotal,
 }) => {
-  if (loading) return <></>
+  if (loading) return <></>;
   if (count > currentTotal) {
     return (
       <div
@@ -64,18 +70,22 @@ export const LoadMoreComponent = ({
           backgroundColor: "#e8fcfc",
         }}
         onClick={() => {
-          fetchMore({ variables: { offset: currentTotal } })
+          fetchMore({ variables: { offset: currentTotal } });
         }}
       >
         Load more
       </div>
-    )
+    );
   }
-  return <></>
-}
+  return <></>;
+};
 
 function DatasetItem({ item, IP }) {
-  const initPoint = item.points_aggregate.aggregate.sum.point || 0
+  const initPoint = item.points_aggregate.aggregate.sum.point || 0;
+  let latestTmsp = null;
+  if (item.points.length > 0) {
+    latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB");
+  }
   return (
     <div className="card">
       <div className="card-content">
@@ -83,11 +93,13 @@ function DatasetItem({ item, IP }) {
         <div style={{ marginLeft: "1rem" }}>
           <div className="category">{item.category.name}</div>
           {item.name}
+          {latestTmsp && (
+            <div className="timestamp">โหวตล่าสุด {latestTmsp}</div>
+          )}
         </div>
       </div>
-      {/* <div className="card-footer"></div> */}
     </div>
-  )
+  );
 }
 
 const CardBox = styled.div`
@@ -105,9 +117,16 @@ const CardBox = styled.div`
         font-style: italic;
         font-size: 0.95rem;
       }
+
+      div.timestamp {
+        margin-top: 5px;
+        color: #aaaaaa;
+        font-style: italic;
+        font-size: 0.85rem;
+      }
     }
   }
-`
+`;
 
 const DATASET_QUERY = gql`
   query DATASET_QUERY($where: dataset_bool_exp!, $offset: Int!, $limit: Int!) {
@@ -126,6 +145,9 @@ const DATASET_QUERY = gql`
         id
         name
       }
+      points(order_by: [{ day: desc }], limit: 1) {
+        day
+      }
       points_aggregate {
         aggregate {
           sum {
@@ -140,4 +162,4 @@ const DATASET_QUERY = gql`
       }
     }
   }
-`
+`;

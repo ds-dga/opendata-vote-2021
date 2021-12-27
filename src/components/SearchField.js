@@ -1,19 +1,17 @@
-import React, { useEffect, useRef, useState } from "react"
-import { useCookies } from "react-cookie"
-import SearchIcon from "../icons/SearchIcon"
+import React, { useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
+import { throttle } from "lodash";
+import SearchIcon from "../icons/SearchIcon";
 
 export default function SearchField({ currentQuery, handleQueryChange }) {
-  const [cookies, setCookie] = useCookies(["searchQuery"])
-  const [q, setQ] = useState(cookies.searchQuery || "")
-  const searchInput = useRef(null)
+  const [cookies, setCookie] = useCookies(["searchQuery"]);
+  const [q, setQ] = useState(cookies.searchQuery || "");
+  const searchInput = useRef(null);
+  const throttled = useRef(
+    throttle((newValue) => handleQueryChange(newValue), 1000)
+  );
 
-  useEffect(() => {
-    if (q !== currentQuery) {
-      if (currentQuery.length === 0) {
-        handleQueryChange(q)
-      }
-    }
-  }, [q, currentQuery, handleQueryChange])
+  useEffect(() => throttled.current(q), [q]);
 
   return (
     <div className="control has-icons-left has-icons-right">
@@ -23,16 +21,16 @@ export default function SearchField({ currentQuery, handleQueryChange }) {
         defaultValue={q}
         placeholder="Search..."
         onKeyPress={(e) => {
-          const v = e.target.value.trim()
+          const v = e.target.value.trim();
           if (e.key === "Enter") {
-            setQ(v)
-            handleQueryChange(q)
+            setQ(v);
+            handleQueryChange(q);
           }
         }}
         onChange={(e) => {
-          const v = e.target.value.trim()
-          setCookie("searchQuery", v, { maxAge: 60, sameSite: true })
-          setQ(v)
+          const v = e.target.value.trim();
+          setCookie("searchQuery", v, { maxAge: 60, sameSite: true });
+          setQ(v);
         }}
         autoComplete="off"
         ref={searchInput}
@@ -44,5 +42,5 @@ export default function SearchField({ currentQuery, handleQueryChange }) {
         {/* <i className="fas fa-check"></i> */}
       </span>
     </div>
-  )
+  );
 }
