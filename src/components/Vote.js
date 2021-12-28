@@ -13,9 +13,7 @@ export default function Vote({ initialValue, datasetID, IP }) {
   const [Point, setPoint] = useState(initialValue)
   const [Cookies, setCookies] = useCookies([vID])
   const [Action, setAction] = useState(null) // 3 states: up, down, -
-  const [upsertVote, { data, loading }] = useMutation(
-    MUTATE_DATASET_POINTS
-  )
+  const [upsertVote, { loading }] = useMutation(MUTATE_DATASET_POINTS)
 
   useEffect(() => {
     // initial value translate --> Cookies to Action (UI) if applicant
@@ -35,26 +33,6 @@ export default function Vote({ initialValue, datasetID, IP }) {
       }
     }
   }, [Cookies, Action, vID])
-
-  useEffect(() => {
-    if (!data) return
-
-    // confirm with mutation result -- change if needed
-    try {
-      const {
-        insert_dataset_points: { returning },
-      } = data
-      const confirmObj = returning[0]
-      if (confirmObj.point !== Point) {
-        alert("IP ของคุณได้มีการโหวดแล้ววันนี้")
-        setPoint(confirmObj.point)
-      }
-    } catch (e) {
-      console.log("error: ", e)
-    }
-    // console.log("data changed: ", data)
-    // console.log(" >>    point: ", Point)
-  }, [data, Point])
 
   function calcVote(action) {
     const prevValue = +Cookies[vID] || 0
@@ -95,20 +73,50 @@ export default function Vote({ initialValue, datasetID, IP }) {
           datasetID,
         },
       })
-      console.log(` --> save ${action} by ${IP}`)
-      console.log(" --> mutation result", Point, result)
+      // console.log(` --> save ${action} by ${IP}`)
+      // console.log(" --> mutation result", Point, result)
+      setAction(null)
+      verifyIfrecorded(Point, ownVal, result)
     }, 2000)
   }
 
+  function verifyIfrecorded(currScore, votingPoint, mutationResult) {
+    let latestPoint = currScore
+    try {
+      const {
+        insert_dataset_points: { returning },
+      } = mutationResult.data
+      const confirmObj = returning[0]
+      latestPoint = confirmObj.dataset.points_aggregate.aggregate.sum.point
+      const votedPoint = confirmObj.point
+      // console.log("verify[ok1]: ", confirmObj)
+      // console.log("verify[ok2]: ", votingPoint, votedPoint)
+      // console.log("verify[ok3]: ", latestPoint, currScore + votingPoint)
+      if (votedPoint !== votingPoint) {
+        alert("Err: your vote does not count")
+        // setPoint(confirmObj.point)
+      }
+      // FIXME: currScore is good except when double clicking vote --
+      //        it stores the previous one, not "real current" value
+      // if (latestPoint !== currScore + votingPoint) {
+      //   alert("IP ของคุณได้มีการโหวดแล้ววันนี้")
+      // }
+    } catch (e) {
+      // console.log("verify[err] ", e)
+    } finally {
+      setPoint(latestPoint)
+      // console.log("verify[finally] ")
+    }
+  }
   const noActionAllowed = Action === null || loading
-
+  const noActMsg = `no action allow: ${loading || "-"} / ${Action || "-"}`
   return (
     <VoteBox>
       <div
         className={`arrow ${Action === "up" ? "up" : ""}`}
         onClick={() => {
           if (noActionAllowed) {
-            alert("no action allow :", loading, Action)
+            alert(noActMsg)
             return
           }
           calcVote(Action === "up" ? "-" : "up")
@@ -121,7 +129,7 @@ export default function Vote({ initialValue, datasetID, IP }) {
         className={`arrow ${Action === "down" ? "down" : ""}`}
         onClick={() => {
           if (noActionAllowed) {
-            alert("no action allow :", loading, Action)
+            alert(noActMsg)
             return
           }
           calcVote(Action === "down" ? "-" : "down")
@@ -155,6 +163,15 @@ const MUTATE_DATASET_POINTS = gql`
       returning {
         point
         day
+        dataset {
+          points_aggregate {
+            aggregate {
+              sum {
+                point
+              }
+            }
+          }
+        }
       }
     }
   }
