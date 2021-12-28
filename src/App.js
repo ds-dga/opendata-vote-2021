@@ -5,6 +5,7 @@ import { ApolloProvider } from "@apollo/client"
 import Main from "./pages/main"
 import Navbar from "./components/Navbar"
 import "../node_modules/bulma/css/bulma.css"
+import "./App.css"
 
 export default function App() {
   const apolloClient = useApollo()

@@ -31,9 +31,9 @@ export default function Navbar() {
         id="navbar"
         className={`navbar-menu  ${isExpanded ? "is-active" : ""}`}
       >
-        <div className="navbar-start">
-          <span className="navbar-item">Home</span>
-          {/* <div className="navbar-item has-dropdown is-hoverable">
+        {/*  <div className="navbar-start">
+         <span className="navbar-item">Home</span>
+          <div className="navbar-item has-dropdown is-hoverable">
             <span className="navbar-link">More</span>
             <div className="navbar-dropdown">
               <span className="navbar-item">About</span>
@@ -42,19 +42,19 @@ export default function Navbar() {
               <hr className="navbar-divider" />
               <span className="navbar-item">Report an issue</span>
             </div>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
 
-        <div className="navbar-end">
+        {/* <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              {/* <span className="button is-primary">
+              <span className="button is-primary">
                 <strong>Sign up</strong>
-              </span> */}
+              </span>
               <span className="button is-light">Log in</span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </nav>
   )

@@ -1,4 +1,4 @@
-import BottomFloater from "./BottomFloater";
+import BottomFloater from "./BottomFloater"
 
 export default function CookieToS() {
   return (
@@ -32,5 +32,5 @@ export default function CookieToS() {
         </>
       }
     />
-  );
+  )
 }

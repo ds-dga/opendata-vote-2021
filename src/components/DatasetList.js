@@ -1,17 +1,17 @@
-import { gql, useQuery } from "@apollo/client";
-import React, { useState } from "react";
-import styled from "styled-components";
-import dayjs from "dayjs";
-import th from "dayjs/locale/th";
-import buddhistEra from "dayjs/plugin/buddhistEra";
-import SearchField from "./SearchField";
-import Vote from "./Vote";
+import { gql, useQuery } from "@apollo/client"
+import React, { useState } from "react"
+import styled from "styled-components"
+import dayjs from "dayjs"
+import th from "dayjs/locale/th"
+import buddhistEra from "dayjs/plugin/buddhistEra"
+import SearchField from "./SearchField"
+import Vote from "./Vote"
 
-dayjs.extend(buddhistEra);
-dayjs.locale(th);
+dayjs.extend(buddhistEra)
+dayjs.locale(th)
 
 export default function DatasetList({ IP }) {
-  const [Query, SetQuery] = useState("");
+  const [Query, SetQuery] = useState("")
   const { data, loading, error, fetchMore } = useQuery(DATASET_QUERY, {
     variables: {
       offset: 0,
@@ -26,29 +26,30 @@ export default function DatasetList({ IP }) {
               ],
             },
     },
-  });
-  const count = (data && data.total.aggregate.count) || 0;
-  const currTotal = (data && data.items.length) || 0;
+  })
+  const count = (data && data.total.aggregate.count) || 0
+  const currTotal = (data && data.items.length) || 0
   // const eof = count == 0 || (count > 0 && currTotal === count)
   return (
     <CardBox>
       {error && <p>Err! {error}...</p>}
-      {loading && <p>Loading...</p>}
-      <SearchField currentQuery={Query} handleQueryChange={SetQuery} />
+      <SearchField
+        loading={loading}
+        currentQuery={Query}
+        handleQueryChange={SetQuery}
+      />
       {data &&
         data.items.map((ele) => (
           <DatasetItem key={ele.id} item={ele} IP={IP} />
         ))}
-      {/* {!eof && ( */}
       <LoadMoreComponent
         loading={loading}
         fetchMore={fetchMore}
         count={count}
         currentTotal={currTotal}
       />
-      {/* )} */}
     </CardBox>
-  );
+  )
 }
 
 export const LoadMoreComponent = ({
@@ -57,7 +58,7 @@ export const LoadMoreComponent = ({
   count,
   currentTotal,
 }) => {
-  if (loading) return <></>;
+  if (loading) return <></>
   if (count > currentTotal) {
     return (
       <div
@@ -70,21 +71,21 @@ export const LoadMoreComponent = ({
           backgroundColor: "#e8fcfc",
         }}
         onClick={() => {
-          fetchMore({ variables: { offset: currentTotal } });
+          fetchMore({ variables: { offset: currentTotal } })
         }}
       >
         Load more
       </div>
-    );
+    )
   }
-  return <></>;
-};
+  return <></>
+}
 
 function DatasetItem({ item, IP }) {
-  const initPoint = item.points_aggregate.aggregate.sum.point || 0;
-  let latestTmsp = null;
+  const initPoint = item.points_aggregate.aggregate.sum.point || 0
+  let latestTmsp = null
   if (item.points.length > 0) {
-    latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB");
+    latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB")
   }
   return (
     <div className="card">
@@ -99,7 +100,7 @@ function DatasetItem({ item, IP }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 const CardBox = styled.div`
@@ -126,7 +127,7 @@ const CardBox = styled.div`
       }
     }
   }
-`;
+`
 
 const DATASET_QUERY = gql`
   query DATASET_QUERY($where: dataset_bool_exp!, $offset: Int!, $limit: Int!) {
@@ -162,4 +163,4 @@ const DATASET_QUERY = gql`
       }
     }
   }
-`;
+`
