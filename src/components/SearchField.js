@@ -9,6 +9,7 @@ export default function SearchField({
   currentQuery,
   handleQueryChange,
   loading,
+  handleGlobalLoading,
 }) {
   const [cookies, setCookie] = useCookies(["searchQuery"])
   const [q, setQ] = useState(cookies.searchQuery || "")
@@ -24,6 +25,7 @@ export default function SearchField({
   useEffect(() => throttled.current(q), [q])
   useEffect(() => {
     setProgress(loading || typing)
+    handleGlobalLoading(loading || typing)
   }, [loading, typing])
 
   return (

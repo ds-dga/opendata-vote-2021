@@ -1,13 +1,15 @@
 import React, { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import digi from "../logo/digi.png"
 
 export default function Navbar() {
+  let navigate = useNavigate()
   const [isExpanded, SetExpand] = useState(false)
 
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item" href="https://data.go.th">
+        <a className="navbar-item" href="/">
           <img src={digi} height="28" alt="DIGI" />
         </a>
 
@@ -31,9 +33,28 @@ export default function Navbar() {
         id="navbar"
         className={`navbar-menu  ${isExpanded ? "is-active" : ""}`}
       >
-        {/*  <div className="navbar-start">
-         <span className="navbar-item">Home</span>
-          <div className="navbar-item has-dropdown is-hoverable">
+        <div className="navbar-start">
+          <span
+            className="navbar-item"
+            onClick={(e) => {
+              e.preventDefault()
+              SetExpand(false)
+              navigate("/")
+            }}
+          >
+            Home
+          </span>
+          <span
+            className="navbar-item"
+            onClick={(e) => {
+              e.preventDefault()
+              SetExpand(false)
+              navigate("/list")
+            }}
+          >
+            กลุ่มข้อมูล
+          </span>
+          {/* <div className="navbar-item has-dropdown is-hoverable">
             <span className="navbar-link">More</span>
             <div className="navbar-dropdown">
               <span className="navbar-item">About</span>
@@ -42,8 +63,8 @@ export default function Navbar() {
               <hr className="navbar-divider" />
               <span className="navbar-item">Report an issue</span>
             </div>
-          </div>
-        </div> */}
+          </div> */}
+        </div>
 
         {/* <div className="navbar-end">
           <div className="navbar-item">

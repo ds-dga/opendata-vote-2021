@@ -3,16 +3,19 @@ import ReactDOM from "react-dom"
 import ReactGA from "react-ga4"
 import { CookiesProvider } from "react-cookie"
 import App from "./App"
-// import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom"
 import "../node_modules/bulma/css/bulma.css"
+// import reportWebVitals from "./reportWebVitals";
 
 ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID)
 
 ReactDOM.render(
   <React.StrictMode>
-    <CookiesProvider>
-      <App />
-    </CookiesProvider>
+    <BrowserRouter>
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 )

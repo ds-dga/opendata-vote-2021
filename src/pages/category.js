@@ -1,13 +1,18 @@
 import React from "react"
+import { Routes, Route } from "react-router-dom"
+import CategoryList from "../components/CategoryList"
 import DatasetList from "../components/DatasetList"
 
-export default function Main({ IP }) {
+export default function Category({ IP }) {
   return (
     <div className="columns">
       <div className="column is-full">
         <Title />
         <div className="content">
-          <DatasetList IP={IP} />
+          <Routes>
+            <Route path={""} element={<CategoryList />} />
+            <Route path={":listID"} element={<DatasetList IP={IP} />} />
+          </Routes>
         </div>
       </div>
     </div>
