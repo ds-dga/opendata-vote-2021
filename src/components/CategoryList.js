@@ -20,7 +20,8 @@ export default function CategoryList() {
             }}
           >
             <div className="card-content">
-              <div style={{ marginLeft: "1rem" }}>{ele.name}</div>
+              <div>{ele.name}</div>
+              <div className="count">{ele.total.aggregate.count}</div>
             </div>
           </div>
         ))}
@@ -33,6 +34,11 @@ const CATEGORY_QUERY = gql`
     items: dataset_category {
       id
       name
+      total: datasets_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   }
 `
@@ -58,11 +64,20 @@ const CardBox = styled.div`
 
     div.card-content {
       display: flex;
-      padding: 0.4rem;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 1rem;
       padding-top: 1rem;
       padding-bottom: 1rem;
       font-size: 1.05rem;
       cursor: pointer;
+
+      .count {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #ababab;
+      }
 
       div.timestamp {
         margin-top: 5px;
