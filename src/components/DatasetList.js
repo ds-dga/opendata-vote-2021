@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { gql, useQuery } from "@apollo/client"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import dayjs from "dayjs"
 import th from "dayjs/locale/th"
@@ -14,6 +14,7 @@ dayjs.locale(th)
 
 export default function DatasetList({ IP }) {
   let { listID } = useParams()
+  const navigate = useNavigate()
   const [GlobalLoading, SetGlobalLoading] = useState(false)
   const [Query, SetQuery] = useState("")
   let where = {}
@@ -48,7 +49,6 @@ export default function DatasetList({ IP }) {
 
   const count = (data && data.total.aggregate.count) || 0
   const currTotal = (data && data.items.length) || 0
-  // const eof = count == 0 || (count > 0 && currTotal === count)
   return (
     <CardBox>
       {error && <div>Err! {error}...</div>}
@@ -58,6 +58,17 @@ export default function DatasetList({ IP }) {
         currentQuery={Query}
         handleQueryChange={SetQuery}
       />
+      {listID && data && (
+        <span className="tag is-warning is-medium">
+          {data.items[0].category.name}
+          <button
+            className="delete is-small"
+            onClick={() => {
+              navigate("/")
+            }}
+          ></button>
+        </span>
+      )}
       {data &&
         data.items.map((ele) => (
           <DatasetItem
@@ -75,6 +86,46 @@ export default function DatasetList({ IP }) {
         currentTotal={currTotal}
       />
     </CardBox>
+  )
+}
+
+function DatasetItem({ item, IP, query, loading }) {
+  const navigate = useNavigate()
+  const initPoint = item.points_aggregate.aggregate.sum.point || 0
+  let latestTmsp = null
+  if (item.points.length > 0) {
+    latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB")
+  }
+  const qLen = query.length
+  let name = item.name
+  if (!loading && qLen > 0) {
+    const ind = name.indexOf(query)
+    const afterInd = ind + qLen
+    name =
+      `${name.substr(0, ind)}` +
+      `<mark>${name.substr(ind, qLen)}</mark>` +
+      `${name.substr(afterInd)}`
+  }
+  return (
+    <div className="card">
+      <div className="card-content">
+        <Vote initialValue={initPoint} datasetID={item.id} IP={IP} />
+        <div style={{ marginLeft: "1rem" }}>
+          <div
+            className="category"
+            onClick={() => {
+              navigate(`/list/${item.category.id}`)
+            }}
+          >
+            {item.category.name}
+          </div>
+          {parse(name)}
+          {latestTmsp && (
+            <div className="timestamp">โหวตล่าสุด {latestTmsp}</div>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -100,41 +151,22 @@ export const LoadMoreComponent = ({
           fetchMore({ variables: { offset: currentTotal } })
         }}
       >
-        Load more
+        แสดงเพิ่มเติม
       </div>
     )
   }
-  return <></>
-}
-
-function DatasetItem({ item, IP, query, loading }) {
-  const initPoint = item.points_aggregate.aggregate.sum.point || 0
-  let latestTmsp = null
-  if (item.points.length > 0) {
-    latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB")
-  }
-  const qLen = query.length
-  let name = item.name
-  if (!loading && qLen > 0) {
-    const ind = name.indexOf(query)
-    const afterInd = ind + qLen
-    name =
-      `${name.substr(0, ind)}` +
-      `<mark>${name.substr(ind, qLen)}</mark>` +
-      `${name.substr(afterInd)}`
-  }
   return (
-    <div className="card">
-      <div className="card-content">
-        <Vote initialValue={initPoint} datasetID={item.id} IP={IP} />
-        <div style={{ marginLeft: "1rem" }}>
-          <div className="category">{item.category.name}</div>
-          {parse(name)}
-          {latestTmsp && (
-            <div className="timestamp">โหวตล่าสุด {latestTmsp}</div>
-          )}
-        </div>
-      </div>
+    <div
+      style={{
+        marginBottom: 5,
+        padding: 5,
+        textAlign: "center",
+        background: "transparent",
+        color: "#bbbbbb",
+        fontSize: "3rem",
+      }}
+    >
+      ~
     </div>
   )
 }
