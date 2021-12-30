@@ -96,16 +96,9 @@ function DatasetItem({ item, IP, query, loading }) {
   if (item.points.length > 0) {
     latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB")
   }
-  const qLen = query.length
-  let name = item.name
-  if (!loading && qLen > 0) {
-    const ind = name.indexOf(query)
-    const afterInd = ind + qLen
-    name =
-      `${name.substr(0, ind)}` +
-      `<mark>${name.substr(ind, qLen)}</mark>` +
-      `${name.substr(afterInd)}`
-  }
+  const regEx = new RegExp(query, "ig")
+  const replacer = "<mark>$&</mark>"
+
   return (
     <div className="card">
       <div className="card-content">
@@ -117,9 +110,9 @@ function DatasetItem({ item, IP, query, loading }) {
               navigate(`/list/${item.category.id}`)
             }}
           >
-            {item.category.name}
+            {parse(item.category.name.replace(regEx, replacer))}
           </div>
-          {parse(name)}
+          {parse(item.name.replace(regEx, replacer))}
           {latestTmsp && (
             <div className="timestamp">โหวตล่าสุด {latestTmsp}</div>
           )}

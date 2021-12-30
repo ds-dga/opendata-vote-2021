@@ -17,16 +17,20 @@ export default function SearchField({
   const [progress, setProgress] = useState(false)
   const searchInput = useRef(null)
   const throttled = useRef(
-    throttle((newValue) => {
-      handleQueryChange(newValue)
-      setTyping(false)
-    }, 2000)
+    throttle(
+      (newValue) => {
+        handleQueryChange(newValue)
+        setTyping(false)
+      },
+      3000,
+      { leading: false, trailing: true }
+    )
   )
   useEffect(() => throttled.current(q), [q])
   useEffect(() => {
     setProgress(loading || typing)
     handleGlobalLoading(loading || typing)
-  }, [loading, typing])
+  }, [loading, typing, handleGlobalLoading])
 
   return (
     <div className="control has-icons-left has-icons-right">

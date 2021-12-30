@@ -1,11 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import { gql, useQuery } from "@apollo/client"
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 
 export default function CategoryList() {
   let navigate = useNavigate()
-  const { data, loading } = useQuery(CATEGORY_QUERY)
+  const { data } = useQuery(CATEGORY_QUERY)
 
   return (
     <CardBox>

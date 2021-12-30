@@ -1,6 +1,6 @@
 {
-  "name": "ds1-web",
-  "version": "0.1.0",
+  "name": "survey-data-go-th",
+  "version": "2.0.1",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.6",
