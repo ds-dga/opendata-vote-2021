@@ -2,15 +2,8 @@ import React, { useEffect, useState } from "react"
 import { gql, useQuery } from "@apollo/client"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
-import dayjs from "dayjs"
-import th from "dayjs/locale/th"
-import parse from "html-react-parser"
-import buddhistEra from "dayjs/plugin/buddhistEra"
 import SearchField from "./SearchField"
-import Vote from "./Vote"
-
-dayjs.extend(buddhistEra)
-dayjs.locale(th)
+import DatasetItem from "./DatasetItem"
 
 export default function DatasetList({ IP }) {
   let { listID } = useParams()
@@ -86,39 +79,6 @@ export default function DatasetList({ IP }) {
         currentTotal={currTotal}
       />
     </CardBox>
-  )
-}
-
-function DatasetItem({ item, IP, query, loading }) {
-  const navigate = useNavigate()
-  const initPoint = item.points_aggregate.aggregate.sum.point || 0
-  let latestTmsp = null
-  if (item.points.length > 0) {
-    latestTmsp = dayjs(item.points[0].day).format("DD MMM BBBB")
-  }
-  const regEx = new RegExp(query, "ig")
-  const replacer = "<mark>$&</mark>"
-
-  return (
-    <div className="card">
-      <div className="card-content">
-        <Vote initialValue={initPoint} datasetID={item.id} IP={IP} />
-        <div style={{ marginLeft: "1rem" }}>
-          <div
-            className="category"
-            onClick={() => {
-              navigate(`/list/${item.category.id}`)
-            }}
-          >
-            {parse(item.category.name.replace(regEx, replacer))}
-          </div>
-          {parse(item.name.replace(regEx, replacer))}
-          {latestTmsp && (
-            <div className="timestamp">โหวตล่าสุด {latestTmsp}</div>
-          )}
-        </div>
-      </div>
-    </div>
   )
 }
 
@@ -209,6 +169,18 @@ const DATASET_QUERY = gql`
       }
       points(order_by: [{ day: desc }], limit: 1) {
         day
+      }
+      possible_matches(
+        limit: 2
+        order_by: [{ feedbacks_aggregate: { sum: { point: desc_nulls_last } } }]
+      ) {
+        name
+        package_id
+      }
+      matches_agg: possible_matches_aggregate {
+        aggregate {
+          count
+        }
       }
       points_aggregate {
         aggregate {
